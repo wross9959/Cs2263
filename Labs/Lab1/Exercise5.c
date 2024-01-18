@@ -1,8 +1,8 @@
 #include <stdio.h>
 
-int main(){
+int main(void){
 
-    int numOfValues = 20, num1 = 0, num2 = 1, num3 = 2, num4 = 0;
+    int numOfValues = 20, num1 = 0, num2 = 0, num3 = 1, num4 = 0;
 
     for(int i = 0; i < numOfValues; i++){
         if(i % 2 == 0){
@@ -13,6 +13,4 @@ int main(){
         num2 = num3;
         num3 = num4;
     }
-
-    return 0;
 }
