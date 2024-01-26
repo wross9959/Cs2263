@@ -27,16 +27,13 @@ void printReversed(int n){
     }
 }
 
-void convertInt(char a[], int n){
-    int num =0;
-    char toReturn[28];
-    for(int i = n, j = 0; i > 0; i--, j++){
+int convertInt(char a[], int n){
+    int toReturn = 0;
+    for(int i = n; i > 0; i--){
 
-        toReturn[j] = a[i];
+        toReturn = (a[i] - '0') + 10 * toReturn;
     }
-
-    printArr(toReturn, n);
-
+    return toReturn;
 }
 
 
@@ -54,7 +51,7 @@ int main(){
     //exercise 3
     char a[] = {'3','2','1'};
     int arrayIntLength = sizeof(a)/ sizeof(a[0]);
-    convertInt(a, arrayIntLength);
-
+    int value = convertInt(a, arrayIntLength);
+    printf("%d",value);
     return 0;
 }
