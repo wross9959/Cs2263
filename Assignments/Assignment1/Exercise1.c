@@ -2,25 +2,15 @@
 
 void printArr(char a[], int n){
 
-    for(int i = 0; i < n; i++){
+    for(int i = 0; i < (n-1); i++){
         putchar(a[i]);
     }
     
 }
 
 int main(){
-    char input[] = {"Enter chars, press enter when you want to stop\n"};
-    
-    putchar(input[]);
-    for(int i = 0; input[i] != ' '; i++){
-        printf("Input:");
-        input[i] = getchar();
-        printf("\n");
-    }
-    int arrayLength = sizeof(input)/ sizeof(input[0]);
-    printArr(input, arrayLength);
-
-
-
+    char message[] = "Hello World";    
+    int arrayLength = sizeof(message)/ sizeof(message[0]);
+    printArr(message, arrayLength);
     return 0;
 }
