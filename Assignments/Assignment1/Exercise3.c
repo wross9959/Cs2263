@@ -1,15 +1,18 @@
 #include <stdio.h>
 
 
-void convertInt(char a[], int n){
 
+
+    
+void printArr(char a[], int n){
+    //just a for loop to go through char array
     for(int i = 0; i < (n-1); i++){
-        putchar((a[i] - '0'));
-    }
+        putchar(a[i]);
+    } 
+
+    //new line after complete
     putchar('\n');
-
 }
-
 void printReversed(int n){
     if(n <= 0){
         //new line after complete        
@@ -23,16 +26,19 @@ void printReversed(int n){
         printReversed(n /= 10);
     }
 }
-    
-void printArr(char a[], int n){
-    //just a for loop to go through char array
-    for(int i = 0; i < (n-1); i++){
-        putchar(a[i]);
-    } 
 
-    //new line after complete
-    putchar('\n');
+void convertInt(char a[], int n){
+    int num =0;
+    char toReturn[28];
+    for(int i = n, j = 0; i > 0; i--, j++){
+
+        toReturn[j] = a[i];
+    }
+
+    printArr(toReturn, n);
+
 }
+
 
 int main(){
 
