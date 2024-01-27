@@ -2,8 +2,8 @@
 
 void printReversed(int n){
     if(n <= 0){
-        //to stop recursive 
-        putchar(' ');
+        //new line after complete        
+        putchar('\n');
     }
     else{
         //prints the value of mod n which will be the last digit
@@ -12,28 +12,33 @@ void printReversed(int n){
         //calls method again until n is empty
         printReversed(n /= 10);
     }
-    //new line after complete
-    putchar('\n');
 }
 void printArr(char a[], int n){
     //just a for loop to go through char array
     for(int i = 0; i < (n-1); i++){
         putchar(a[i]);
     } 
-
     //new line after complete
     putchar('\n');
 }
 int main(){
 
-    //exercise 1
-    char message[] = "Hello World";    
-    int arrayLength = sizeof(message)/ sizeof(message[0]);
-    printArr(message, arrayLength);
+    int number = 1;
+    int number1 = 100021;
+    int number2 = 1263;
+    int number3 = 2263;
 
-    //exercise 2
-    int number = 22063;
-    printReversed(number);
+    //test 1
+    //printReversed(number);
+
+    //test 2
+    //printReversed(number1);
+
+    //test 3
+    //printReversed(number2);
+
+    //test 4
+    //printReversed(number3);
 
     return 0;
 }
