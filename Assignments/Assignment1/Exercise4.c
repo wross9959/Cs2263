@@ -1,5 +1,6 @@
 #include <stdio.h>
-
+#include <ctype.h>
+   
 void printArr(char a[], int n){
     //just a for loop to go through char array
     for(int i = 0; i < (n-1); i++){
@@ -22,18 +23,6 @@ void printReversed(int n){
         printReversed(n /= 10);
     }
 }
-int convertInt(char a[], int n){
-
-    //int value to return
-    int toReturn = 0;
-
-    //to get num values
-    for(int i = n; i > 0; i--){
-
-        toReturn = (a[i] - '0') + 10 * toReturn;
-    }
-    return toReturn;
-}
 int reverseInt(int num) {
     int reversed = 0;
     while (num != 0) {
@@ -43,7 +32,25 @@ int reverseInt(int num) {
     }
     return reversed;
 }
+int convertInt(char a[], int n){
 
+    //int value to return
+    int toReturn = 0;
+
+    //to get num values
+    for(int i = (n-1); i >= 0 && isdigit(a[i]); i--){
+
+        toReturn = (a[i] - '0') + 10 * toReturn;
+    }
+    return toReturn;
+}
+int addReversedInt(char a[], int n, char b[], int m){
+
+    int num1 = convertInt(a, n);
+    int num2 = convertInt(b, m);
+    return num1 + num2;
+    
+}
 int main(){
 
     //exercise 1
@@ -57,9 +64,16 @@ int main(){
 
     //exercise 3
     char a[] = {'3','2','1'};
-    int arrayIntLength = sizeof(a)/ sizeof(a[0]);
-    int value = convertInt(a, arrayIntLength);
+    int arrayALength = sizeof(a)/ sizeof(a[0]);
+    int value = convertInt(a, arrayALength);
     printReversed(reverseInt(value));
-    return 0;
 
+    //exercise 4
+    char b[] = {'6','5','4'};
+    int arrayBLength = sizeof(b)/ sizeof(b[0]);
+    int sum = addReversedInt(a, arrayALength, b, arrayBLength);
+    printReversed(reverseInt(sum));
+
+
+    return 0;
 }

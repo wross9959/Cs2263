@@ -15,8 +15,6 @@ void printReversed(int n){
     //new line after complete
     putchar('\n');
 }
-
-
 void printArr(char a[], int n){
     //just a for loop to go through char array
     for(int i = 0; i < (n-1); i++){
@@ -26,7 +24,6 @@ void printArr(char a[], int n){
     //new line after complete
     putchar('\n');
 }
-
 int main(){
 
     //exercise 1

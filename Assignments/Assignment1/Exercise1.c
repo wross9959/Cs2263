@@ -7,7 +7,6 @@ void printArr(char a[], int n){
     }
     
 }
-
 int main(){
     char message[] = "Hello World";    
     int arrayLength = sizeof(message)/ sizeof(message[0]);
