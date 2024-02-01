@@ -5,6 +5,8 @@ int calcTrib(int n) {
     return n;
 }
 
+
+#include <stdio.h>
 int main(void){
     int numOfValues = 20, num1 = 0, num2 = 0, num3 = 1, num4 = 0;
     for(int i = 0; i < numOfValues; i++){
