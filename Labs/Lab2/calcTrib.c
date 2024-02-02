@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 int calcTrib(int n) {
-    printf("%d\n", n);
+    printf("value: %d memory address: %p\n", n, &n);
     return n;
 }
 
