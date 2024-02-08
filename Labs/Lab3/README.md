@@ -224,7 +224,7 @@ int main(int argc, char * * argv)
     printf("& of arr[%d] %d\t%p\n", -1,arr[-1], &arr[-1]);
 
     //all valid
-    for(int i = 0; i < sizeof(arr)/sizeof(arr[0]) + 3; i++){
+    for(int i = 0; i < sizeof(arr)/sizeof(arr[0]) + 1; i++){
 
         printf("& of arr[%d]\t%d\t%p\n", i,arr[i], &arr[i]);
 
@@ -285,17 +285,21 @@ Similarly, y is changed because of this assignment:
 #### My Results
 
 ```
-& of x = 0x7ffed4849c38,
-& of y = 0x7ffed4849c1c
-& of arr[-1] 	15 		0x7ffed4849c1c
-& of arr[0]     0       0x7ffed4849c20
-& of arr[1]     1       0x7ffed4849c24
-& of arr[2]     2       0x7ffed4849c28
-& of arr[3]     3       0x7ffed4849c2c
-& of arr[4]     4       0x7ffed4849c30
-& of arr[5]     0       0x7ffed4849c34
+[q3d5k@gc112m38 ~]$ cd "/home1/ugrads/q3d5k/Cs2263/Labs/Lab3/" && gcc wrongindex.c -o wrongindex && "/home1/ugrads/q3d5k/Cs2263/Labs/Lab3/"wrongindex
+& of x = 0x7ffd46b75ae8,
+& of y = 0x7ffd46b75acc
+& of arr[-1] 15 0x7ffd46b75acc
+& of arr[0]     0       0x7ffd46b75ad0
+& of arr[1]     1       0x7ffd46b75ad4
+& of arr[2]     2       0x7ffd46b75ad8
+& of arr[3]     3       0x7ffd46b75adc
+& of arr[4]     4       0x7ffd46b75ae0
+& of arr[5]     0       0x7ffd46b75ae4
+& of arr[6]     -2      0x7ffd46b75ae8
+& of arr[7]     7       0x7ffd46b75aec
 x = -2, y = 15
 x = -2, y = 7
 x = 108, y = 7
 x = 108, y = 7
+[q3d5k@gc112m38 Lab3]$ 
 ```

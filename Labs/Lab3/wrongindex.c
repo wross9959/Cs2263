@@ -20,7 +20,7 @@ int main(int argc, char * * argv)
     printf("& of arr[%d] %d\t%p\n", -1,arr[-1], &arr[-1]);
 
     //all valid
-    for(int i = 0; i < sizeof(arr)/sizeof(arr[0]) + 1; i++){
+    for(int i = 0; i < sizeof(arr)/sizeof(arr[0]) + 3; i++){
 
         printf("& of arr[%d]\t%d\t%p\n", i,arr[i], &arr[i]);
 
