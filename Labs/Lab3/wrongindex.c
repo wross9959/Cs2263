@@ -17,13 +17,14 @@ int main(int argc, char * * argv)
 
 
     //one invaild
-    printf("& of arr[%d] = %p\n", -1, (void *)&arr[-1]);
+    printf("& of arr[%d] %d\t%p\n", -1,arr[-1], &arr[-1]);
 
     //all valid
-    for(int i = 0; i < sizeof(arr)/sizeof(arr[0]); i++){
-        printf("& of arr[%d] = %p\n", i, (void *)&arr[i]);
+    for(int i = 0; i < sizeof(arr)/sizeof(arr[0]) + 1; i++){
+
+        printf("& of arr[%d]\t%d\t%p\n", i,arr[i], &arr[i]);
+
     }
-   
 
     printf("x = %d, y = %d\n", x, y);
 

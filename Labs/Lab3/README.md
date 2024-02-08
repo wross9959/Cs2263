@@ -103,17 +103,17 @@ Yes all the pointer varibles are being incremented between the successive print 
 
 #### tptr (int pointer)
 
-The increment is 4 bytes (0000003c533ff980 - 0000003c533ff984 - 0000003c533ff988 - 0000003c533ff98c)
+The increment is 4 bytes (0x7fffa9d5b770 - 0x7fffa9d5b774 - 0x7fffa9d5b778 - 0x7fffa9d5b77c)
 which is the size of the int in the program being run
 
 #### cptr (char pointer)
 
-The increment is 1 byte (0000003c533ff97a - 0000003c533ff97b - 0000003c533ff97c - 0000003c533ff97d)
+The increment is 1 byte (0x7fffa9d5b76a - 0x7fffa9d5b76b - 0x7fffa9d5b76c - 0x7fffa9d5b76d)
 which is the size of the char in the program being run
 
 #### dptr (double pointer)
 
-The increment is 8 bytes (0000003c533ff950 - 0000003c533ff958 - 0000003c533ff960 - 0000003c533ff968)
+The increment is 8 bytes (0x7fffa9d5b740 - 0x7fffa9d5b748 - 0x7fffa9d5b750 - 0x7fffa9d5b758)
 which is the size of the double in the program being run
 
 ### Are the increments for different pointers the same? Explain why.
@@ -142,7 +142,7 @@ void printArray(int arr[], int len){
     int *aptr = arr;
     printf("Index\tValue\tAddress\t\t\tValue\n");
     for(int i = 0; i < len; i++){
-        printf("%d\t%d\t%p\t%d\n", i, arr[i], &arr[i], *aptr++);
+        printf("%d\t%d\t%p\t%d\n", i, arr[i], arr[i], *aptr++);
 
     }
 }
@@ -184,23 +184,24 @@ int main (int argc ,char * * argv)
     //for exercise 3
     int arr[] = {10, 11, 12, 13, 14, 15, 16};
     for (int i = 0; i < sizeof(arr)/sizeof(arr[0]); i ++){
-        printf ("%d\t%p\n", i, arrindex( arr, & arr[i]));
+        printf ("%d\t%d\n", i, arrindex( arr, & arr[i]));
     }
     return EXIT_SUCCESS;
 }
 ```
 
 ### Output Screenshot
-![Screenshot](Ex3Output2.png)
+![Screenshot](Ex3Output.png)
 
 ## Exercise 4
 
 ## Compiler command
-`if ($?) { gcc wrongindex.c -o wrongindex } ; if ($?) { .\wrongindex }`
+`[q3d5k@gc112m38 Lab3]$ cd "/home1/ugrads/q3d5k/Cs2263/Labs/Lab3/" && gcc wrongindex.c -o wrongindex && "/home1/ugrads/q3d5k/Cs2263/Labs/Lab3/"wrongindex`
 
 ### source code 
 
 ```c
+
 /*
  * wrongindex.c
  */
@@ -220,13 +221,14 @@ int main(int argc, char * * argv)
 
 
     //one invaild
-    printf("& of arr[%d] = %p\n", -1, (void *)&arr[-1]);
+    printf("& of arr[%d] %d\t%p\n", -1,arr[-1], &arr[-1]);
 
     //all valid
-    for(int i = 0; i < sizeof(arr)/sizeof(arr[0]); i++){
-        printf("& of arr[%d] = %p\n", i, (void *)&arr[i]);
+    for(int i = 0; i < sizeof(arr)/sizeof(arr[0]) + 1; i++){
+
+        printf("& of arr[%d]\t%d\t%p\n", i,arr[i], &arr[i]);
+
     }
-   
 
     printf("x = %d, y = %d\n", x, y);
 
@@ -246,13 +248,14 @@ int main(int argc, char * * argv)
 
     return EXIT_SUCCESS;
 }
+
 ```
 
 ### Output Screenshot
 ![Screenshot](Ex4Output.png)
 
 ### Diagram of memory locations
-
+![Screenshot](Diagram.png)
 ### Are the results (i.e. numerical values) printed from your program different from the results shown in the textbook? Explain why
 
 #### Memory addresses
@@ -282,14 +285,15 @@ Similarly, y is changed because of this assignment:
 #### My Results
 
 ```
-& of x = 00000083661ffb98,
-& of y = 00000083661ffb7c
-& of arr[-1] = 00000083661ffb7c
-& of arr[0] = 00000083661ffb80
-& of arr[1] = 00000083661ffb84
-& of arr[2] = 00000083661ffb88
-& of arr[3] = 00000083661ffb8c
-& of arr[4] = 00000083661ffb90
+& of x = 0x7ffed4849c38,
+& of y = 0x7ffed4849c1c
+& of arr[-1] 	15 		0x7ffed4849c1c
+& of arr[0]     0       0x7ffed4849c20
+& of arr[1]     1       0x7ffed4849c24
+& of arr[2]     2       0x7ffed4849c28
+& of arr[3]     3       0x7ffed4849c2c
+& of arr[4]     4       0x7ffed4849c30
+& of arr[5]     0       0x7ffed4849c34
 x = -2, y = 15
 x = -2, y = 7
 x = 108, y = 7

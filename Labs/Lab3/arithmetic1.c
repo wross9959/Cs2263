@@ -19,7 +19,7 @@ int main (int argc ,char * * argv)
     double * dptr = arr3;
 
 
-    printf("addresses = %p, %p, %p\n", (void*) iptr, (void*) cptr, (void*) dptr);
+    printf("addresses = %p, %p, %p\n",  iptr, cptr, dptr);
     printf("values = %d, %c, %f\n", * iptr, * cptr, * dptr);
 
 
@@ -28,7 +28,7 @@ int main (int argc ,char * * argv)
     dptr ++;
 
 
-    printf("addresses = %p, %p, %p\n", (void*) iptr, (void*) cptr, (void*) dptr);
+    printf("addresses = %p, %p, %p\n", iptr, cptr, dptr);
     printf("values = %d, %c, %f\n", * iptr, * cptr, * dptr);
 
 
@@ -36,7 +36,7 @@ int main (int argc ,char * * argv)
     cptr ++;
     dptr ++;
 
-    printf("addresses = %p, %p, %p\n", (void*) iptr, (void*) cptr, (void*) dptr);
+    printf("addresses = %p, %p, %p\n", iptr, cptr, dptr);
     printf("values = %d, %c, %f\n", * iptr, * cptr, * dptr);
 
 
@@ -45,7 +45,7 @@ int main (int argc ,char * * argv)
     dptr ++;
 
 
-    printf("addresses = %p, %p, %p\n", (void*) iptr, (void*) cptr, (void*) dptr);
+    printf("addresses = %p, %p, %p\n", iptr, cptr, dptr);
     printf("values = %d, %c, %f\n", * iptr, * cptr, * dptr);
 
 
