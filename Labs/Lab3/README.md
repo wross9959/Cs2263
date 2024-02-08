@@ -34,7 +34,8 @@ In C, negative indexing of arrays doesnt exist like python or java. C will attem
 ## Exercise 1
 
 ### Source code
-```
+
+```c
 // arithmetic1.c
 #include <stdio.h>
 #include <stdlib.h>
@@ -118,16 +119,20 @@ which is the size of the double in the program being run
 ### Are the increments for different pointers the same? Explain why.
 
 No depeding on the data type the pointers increments will be different, due to the different byte size of the data types 
-```
+
+```c
     int = 4 bytes
     char = 1 byte
     double = 8 bytes
 ```
+
 In c when you increment a pointer it moves to the next element of its data type meaning that the three pointers will never increement the same way for this program.
 
 ## Exercise 2
 
 ### source code
+
+```c
 // arithmetic1.c
 #include <stdio.h>
 #include <stdlib.h>
@@ -159,7 +164,8 @@ int main (int argc ,char * * argv)
 ## Exercise 3
 
 ### source code 
-```
+
+```c
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -180,6 +186,7 @@ int main (int argc ,char * * argv)
     return EXIT_SUCCESS;
 }
 ```
+
 ### Output Screenshot
 ![Screenshot](Ex3Output2.png)
 
@@ -189,7 +196,8 @@ int main (int argc ,char * * argv)
 `if ($?) { gcc wrongindex.c -o wrongindex } ; if ($?) { .\wrongindex }`
 
 ### source code 
-```
+
+```c
 /*
  * wrongindex.c
  */
@@ -236,6 +244,7 @@ int main(int argc, char * * argv)
     return EXIT_SUCCESS;
 }
 ```
+
 ### Output Screenshot
 ![Screenshot](Ex4Output.png)
 
@@ -251,6 +260,7 @@ My memory address will be completely diffrenet due to c being a hardware low lev
 In the text they do the out of bounds call `arr[-1]` there x changes to 108 while my y changes to 7 when I call `arr[-1]` this means that it does not overlap with y in my program due to my personal memory layout. 
 
 #### TextBook Results
+
 ```
 & x = 0x7fffcabf4e68, & y = 0x7fffcabf4e6c
 & arr[0] = 0x7fffcabf4e50, & arr[4] = 0x7fffcabf4e60
@@ -265,7 +275,9 @@ Similarly, y is changed because of this assignment:
     arr [7] = -353;
 
 ```
+
 #### My Results
+
 ```
 & of x = 00000083661ffb98,
 & of y = 00000083661ffb7c
