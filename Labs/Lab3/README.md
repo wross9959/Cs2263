@@ -246,6 +246,36 @@ int main(int argc, char * * argv)
 
 My memory address will be completely diffrenet due to c being a hardware low level language so our memory addresses/pointers wil most likely always be different.
 
-
 #### Numeric Changes
 In the text they do the out of bounds call `arr[-1]` there x changes to 108 while my y changes to 7 when I call `arr[-1]` this means that it does not overlap with y in my program due to my personal memory layout. 
+
+#### TextBook Results
+```
+& x = 0x7fffcabf4e68, & y = 0x7fffcabf4e6c
+& arr[0] = 0x7fffcabf4e50, & arr[4] = 0x7fffcabf4e60
+x = -2, y = 15
+x = -2, y = 15
+x = 108, y = 15
+x = 108, y = -353
+
+As we can see, x has changed because of this assignment:
+    arr [6] = 108;
+Similarly, y is changed because of this assignment:
+    arr [7] = -353;
+
+```
+#### My Results
+```
+& of x = 00000083661ffb98,
+& of y = 00000083661ffb7c
+& of arr[-1] = 00000083661ffb7c
+& of arr[0] = 00000083661ffb80
+& of arr[1] = 00000083661ffb84
+& of arr[2] = 00000083661ffb88
+& of arr[3] = 00000083661ffb8c
+& of arr[4] = 00000083661ffb90
+x = -2, y = 15
+x = -2, y = 7
+x = 108, y = 7
+x = 108, y = 7
+```
