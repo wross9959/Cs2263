@@ -133,6 +133,7 @@ In c when you increment a pointer it moves to the next element of its data type 
 ### source code
 
 ```c
+
 // arithmetic1.c
 #include <stdio.h>
 #include <stdlib.h>
@@ -156,7 +157,9 @@ int main (int argc ,char * * argv)
 
     return EXIT_SUCCESS;
 }
+
 ```
+
 ### Output Screenshot
 ![Screenshot](Ex2Output.png)
 
