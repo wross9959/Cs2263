@@ -1,26 +1,54 @@
-# Lab 3
 
+# CS2263
+
+## Lab 3
+**Date:** February 8th, 2024  
+---
+**Student:**  
+Name: Will Ross  
+Number: #3734692  
+Email: [will.ross@unb.ca](mailto:will.ross@unb.ca)
+
+**Due Date:** February 12th, 2024
+---
 ## Contents
+- [Lab 3](#lab-3)
+      - [Name](#name)
+      - [Studnet ID](#studnet-id)
+      - [Course](#course)
+      - [Date](#date)
+  - [Contents](#contents)
+  - [Pre Lab](#pre-lab)
+    - [Answer](#answer)
+  - [Exercise 1](#exercise-1)
+    - [Source code](#Source-code)
+    - [Output Screenshot](#output-screenshot)
+    - [Are the pointer variables incremented between successive print operations?](#are-the-pointer-variables-incremented-between-successive-print-operations)
+    - [Use the memory addresses printed by your program to calculate the increments used for each pointer variable.](#use-the-memory-addresses-printed-by-your-program-to-calculate-the-increments-used-for-each-pointer-variable)
+      - [tptr (int pointer)](#tptr-int-pointer)
+      - [cptr (char pointer)](#cptr-char-pointer)
+      - [dptr (double pointer)](#dptr-double-pointer)
+    - [Are the increments for different pointers the same? Explain why.](#are-the-increments-for-different-pointers-the-same-explain-why)
+  - [Exercise 2](#exercise-2)
+    - [Source code](#Source-code-1)
+    - [Output Screenshot](#output-screenshot-1)
+  - [Exercise 3](#exercise-3)
+    - [Source code](#Source-code-2)
+    - [Output Screenshot](#output-screenshot-2)
+  - [Exercise 4](#exercise-4)
+  - [Compiler command](#compiler-command)
+    - [Source code](#Source-code-3)
+    - [Output Screenshot](#output-screenshot-3)
+    - [Diagram of memory locations](#diagram-of-memory-locations)
+    - [Are the results (i.e. numerical values) printed from your program different from the results shown in the textbook? Explain why](#are-the-results-ie-numerical-values-printed-from-your-program-different-from-the-results-shown-in-the-textbook-explain-why)
+      - [Memory addresses](#memory-addresses)
+      - [Numeric Changes](#numeric-changes)
+      - [TextBook Results](#textbook-results)
+      - [My Results](#my-results)
 
-- [Pre Lab](#answer)
-- [Exercise1](#exercise-1)
-    -[Source Code](#source-code)
-    -[Output](#output-screenshot)
-    -[Extra Questions](#are-the-increments-for-different-pointers-the-same-explain-why)
-- [Exercise2](#exercise-2)
-    -[Source Code](#source-code-1)
-    -[Output](#output-screenshot-1)
-- [Exercise3](#exercise-3)
-    -[Source Code](#source-code-2)
-    -[Output](#output-screenshot-2)
-- [Exercise4](#exercise-4)
-    -[Compiler](#compiler-command)
-    -[Source Code](#source-code-3)
-    -[Output](#output-screenshot-3)
-    -[Diagram](#diagram-of-memory-locations)
-    -[Extra Questions](#are-the-results-ie-numerical-values-printed-from-your-program-different-from-the-results-shown-in-the-textbook-explain-why)
 
 
+## Lab 3
 
 ## Pre Lab
 Briefly (in couple of sentences) explain what is the meaning of the following reference to array a[]:
@@ -130,7 +158,7 @@ In c when you increment a pointer it moves to the next element of its data type 
 
 ## Exercise 2
 
-### source code
+### Source code
 
 ```c
 
@@ -166,7 +194,7 @@ int main (int argc ,char * * argv)
 
 ## Exercise 3
 
-### source code 
+### Source code 
 
 ```c
 #include <stdio.h>
@@ -198,7 +226,7 @@ int main (int argc ,char * * argv)
 ## Compiler command
 `[q3d5k@gc112m38 Lab3]$ cd "/home1/ugrads/q3d5k/Cs2263/Labs/Lab3/" && gcc wrongindex.c -o wrongindex && "/home1/ugrads/q3d5k/Cs2263/Labs/Lab3/"wrongindex`
 
-### source code 
+### Source code 
 
 ```c
 
