@@ -1,22 +1,7 @@
-body lang=EN-CA link=blue vlink="#954F72">
+
+<body lang=EN-CA link=blue vlink="#954F72">
 <div class=WordSection1>
 <p class=MsoNormal><b><span lang=EN-US style='font-size:14.0pt;font-family: "Times New Roman",serif'>CS 2263</span></b></p>
 <p class=MsoNormal><b><span lang=EN-US style='font-size:14.0pt;font-family: "Times New Roman",serif'>Assignment 2</span></b></p>
 
 
-we find the following tags:
-
-<body lang=EN-CA link=blue vlink="#954F72">
-<div class=WordSection1>
-<p class=MsoNormal>
-<b>
-<span lang=EN-US style='font-size:14.0pt;font-family: "Times New Roman",serif'>
-</span>
-</b>
-</p>
-<p class=MsoNormal>
-<b>
-<span lang=EN-US style='font-size:14.0pt;font-family: "Times New Roman",serif'>
-</span>
-</b>
-</p>
