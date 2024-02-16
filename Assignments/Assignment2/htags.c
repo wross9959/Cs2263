@@ -1,66 +1,76 @@
 #include <stdio.h>
 #include <string.h>
-
+#include <stdbool.h>
 void printArr(char a[], int n){
-    //just a for loop to go through char array
+
     for(int i = 0; i < (n-1); i++){
 
         putchar(a[i]);
     } 
 
-    //new line after complete
     putchar('\n');
-}
-void rem(char a[], int n){
-    int indexArray[n];
-    int index = 0;
-    for(int i = 0; i < (n-1); i++)
-    {
-        if(a[i] != '\n')
-        {
-            indexArray[index] = i;
-            index++;
-        }
-    }
-    char newString[index];
-    for(int i = 0; i < (index -1); i++){
-        newString[i] = a[indexArray[i]];
-    }
-    printArr(newString, strlen(newString));
 }
 void readTags()
 {
-    //int tagsLength = 1316134;
-    //char tags[tagsLength];
+
     int currChar;
     int first = '<';
     int second = '>';
-    int space = ' ';
     int newline = '\n';
-    //int index = 0;
+    bool inComment = false;
+    int check;
 
     while((currChar = getchar()) != EOF)
     {
+        inComment = false;
         if(currChar == '<')
         {
-            //tags[index++] = '<';
-            putchar(first);
-            while((currChar = getchar()) != '>' && currChar != EOF){
-                //tags[index++] = currChar;
-                putchar(currChar);
+            
+            check = getchar();
+            // check = getchar();
+            if(check == '!' )
+            {
+                
+                inComment = true;
             }
-            putchar(second);
-            putchar(newline);
-            //tags[index++] = '>';
-            //tags[index++] = '\n';
+            else
+            {
+                putchar(first);
+                putchar(check);
+                
+            }
+
+            while((currChar = getchar()) != '>' && currChar != EOF){
+                if(!inComment)
+                {
+                    putchar(currChar);
+                    continue;
+                }
+            }
+            if(!inComment)
+            {
+                
+                putchar(second);
+                putchar(newline);
+                
+            }
+            
+ 
         }
+        
     }
-    //tags[index++] = '\0';
-    //printArr(tags, strlen(tags));
+
 }
 int main() 
 {
+
+    char start[] = "Start of output:\n";
+    char end[] = "End of output:\n";
+
+    printArr(start, strlen(start));
     readTags();
+    printArr(end, strlen(end));
+    
     return 0;
 }
 
