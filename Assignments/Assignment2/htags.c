@@ -1,40 +1,67 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
-#define MAX_TAG_LENGTH 1000
+void printArr(char a[], int n){
+    //just a for loop to go through char array
+    for(int i = 0; i < (n-1); i++){
 
-void extract_tags() {
-    int c;
-    while ((c = getchar()) != EOF) {
-        if (c == '<') {
-            putchar(c);
-            while ((c = getchar()) != EOF && c != '>') {
-                putchar(c);
-            }
-            if (c != EOF) {
-                putchar(c);
-            }
-        }
-    while ((c = getchar()) != EOF) {
-        if (c == '<') {
-            // Skip past the tag
-            while ((c = getchar()) != EOF && c != '>') {
-                // Ignore characters within the tag
-            }
-        } else {
-            // Print the plain text character
-            putchar(c);
+        putchar(a[i]);
+    } 
+
+    //new line after complete
+    putchar('\n');
+}
+void rem(char a[], int n){
+    int indexArray[n];
+    int index = 0;
+    for(int i = 0; i < (n-1); i++)
+    {
+        if(a[i] != '\n')
+        {
+            indexArray[index] = i;
+            index++;
         }
     }
+    char newString[index];
+    for(int i = 0; i < (index -1); i++){
+        newString[i] = a[indexArray[i]];
+    }
+    printArr(newString, strlen(newString));
 }
-
-int main()
+void readTags()
 {
-    // Uncomment the appropriate function call based on the utility program you want to run
-    // extract_tags();
-    // extract_plain_text();
-    printf("\n");
+    //int tagsLength = 1316134;
+    //char tags[tagsLength];
+    int currChar;
+    int first = '<';
+    int second = '>';
+    int space = ' ';
+    int newline = '\n';
+    //int index = 0;
+
+    while((currChar = getchar()) != EOF)
+    {
+        if(currChar == '<')
+        {
+            //tags[index++] = '<';
+            putchar(first);
+            while((currChar = getchar()) != '>' && currChar != EOF){
+                //tags[index++] = currChar;
+                putchar(currChar);
+            }
+            putchar(second);
+            putchar(newline);
+            //tags[index++] = '>';
+            //tags[index++] = '\n';
+        }
+    }
+    //tags[index++] = '\0';
+    //printArr(tags, strlen(tags));
+}
+int main() 
+{
+    readTags();
     return 0;
 }
+
 

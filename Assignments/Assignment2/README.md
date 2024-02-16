@@ -14,8 +14,17 @@
 ### Run
 
 `./htext1 < file.txt`
-
+`./htext1 < A2W2024.html`
 
 ### Output
 
 `CS 2263 Assignment 2`
+
+### Compile
+
+`gcc -o htags htags.c`
+
+### Run
+
+`./htags < file.txt`
+`./htags < A2W2024.html`

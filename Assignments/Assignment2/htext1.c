@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 void printArr(char a[], int n){
     //just a for loop to go through char array
@@ -10,9 +11,8 @@ void printArr(char a[], int n){
     //new line after complete
     putchar('\n');
 }
-void removeWhiteSpace(char a[], int n)
-{
-    int indexArray[1000];
+void rem(char a[], int n){
+    int indexArray[n];
     int index = 0;
     for(int i = 0; i < (n-1); i++)
     {
@@ -23,90 +23,38 @@ void removeWhiteSpace(char a[], int n)
         }
     }
     char newString[index];
-
     for(int i = 0; i < (index -1); i++){
-        if(a[indexArray[i]] == '<')
-        {
-            i++;
-            if(a[indexArray[i]] == 'b')
-            {
-                i++;
-
-                if(a[indexArray[i]] == '/')
-                {
-                    newString[i] = ' ';
-                    i++;
-                }
-                else{
-                    newString[i] = ' ';
-                }
-            }
-        }
-        else if(a[indexArray[i]] == 'b'){
-            i++;
-            if(a[indexArray[i]] == '>'){
-            
-            }
-        }
-        else{
-            newString[i] = a[indexArray[i]];
-        }
-        
+        newString[i] = a[indexArray[i]];
     }
-    printArr(newString, index);
+    printArr(newString, strlen(newString));
 }
-
-void readFile()
+void readText()
 {
-    int textLength = 1000;
+    int textLength = 1316134;
     char text[textLength];
-    char currChar;
-    int inTag = 0; 
-    int inComment = 0; 
+    int currChar;
     int index = 0;
+    int space = ' ';
+    int newline = '\n';
 
-    while ((currChar = getchar()) != EOF ) 
+    while((currChar = getchar()) != EOF)
     {
-        if (!inComment && currChar == '<') 
+        if(currChar == '>')
         {
-            if ((currChar = getchar()) == '!') 
-            { 
-                if ((currChar = getchar()) == '-' && (currChar = getchar()) == '-') 
-                {
-                    inComment = 1; 
-                    continue;
-                }
-            } 
-            else 
-            {
-                inTag = 1; 
+            while((currChar = getchar()) != '<' && currChar != EOF){
+                putchar(currChar);
+                //text[index++] = currChar;
             }
-        } 
-        else if (inComment && currChar == '-' && (currChar = getchar()) == '-' && (currChar = getchar()) == '>') 
-        {
-            inComment = 0; 
-            continue;
-        } 
-        else if (inTag && currChar == '>') 
-        {
-            inTag = 0; 
-            text[index++] = getchar();
-            continue;
-        }
-
-        if (!inTag && !inComment ) 
-        {
-            text[index++] = currChar; 
+            //text[index++] = ' ';
+            putchar(space);
         }
     }
-    text[index] = '\0';
-    removeWhiteSpace(text,index);
+    //text[index++] = '\0';
+    //rem(text, strlen(text));
 }
-
-
 int main() 
 {
-    readFile();
+    readText();
     return 0;
 }
 
