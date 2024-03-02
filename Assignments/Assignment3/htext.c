@@ -1,62 +1,41 @@
 #include <stdio.h>
 #include <string.h>
-
-void readText2(char input[])
+#include <stdlib.h>
+void readFile(char *filename)
 {
-    
-    for(int i = 0; i != '\0'; i++)
+    FILE *file = fopen(filename, "r");
+
+    if (file == NULL)
     {
-        printf("Works");
-        if(input[i] == '>') 
+        printf("ERROR: Could not open file\n");
+        return;
+    }
+    int currChar;
+    while((currChar = fgetc(file)) != EOF)
+    {
+        if(currChar == '>')
         {
-            
-            while(i != '<' && i != '\0')
+            while((currChar = fgetc(file)) != '<' && currChar != EOF)
             {
-                i++;
-                printf(&input[i]);
+                printf("%c", currChar);
             }
-            printf(" ");
+            printf("%c",' ');
         }
     }
 }
-void printArr(char a[], int n)
-{
-    //just a for loop to go through char array
-    for(int i = 0; i < (n-1); i++)
-    {
 
-        putchar(a[i]);
-    } 
-
-    //new line after complete
-    putchar('\n');
-}
 
 int main(int argc, char *argv[])
 {
-    char input[100];
-    //printf("Provide some htags for the program:\n");
-    //scanf("%s", &input);
-    //printf("%s", input);
-    //printArr(input, strlen(input));
-
-    FILE *file = fopen(argv[1], "r");
-    if (!file) {
-        perror("Error opening file");
-        return 1;
-    }
-    
-    FILE *pF = fopen("C:\\Users\\willr\\Documents\\GitHub\\Cs2263\\Assignments\\Assignment3\\index.html", "r");
-    char buffer[255];
-
-    while(fgets(buffer, 255, pF) != NULL)
+   
+    if (argc != 2)
     {
-        printf("%s", buffer);
+        printf("ERROR: Provide a file to read.\n");
+        return EXIT_FAILURE;
     }
-    // fgets(buffer, 255, pF);
-    
-    fclose(pF);
 
-    return 0;
+    readFile(argv[1]);
+
+    return EXIT_SUCCESS;
 
 }
