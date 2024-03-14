@@ -127,7 +127,7 @@ From the photo we see that we have two frames frame 1 and frame 0 on the memory 
 
 #### C. The screenshot showing the output info frame 0. What are the frame boundaries of the main function? (Hint: compare the values under “Stack frame at” and “Called by frame at”).
 
-![InfoFrame2](Exercise1Photos\ex1.2C.png)
+![InfoFrame2](Exercise1Photos\ex1.2c.png)
 
 Stack Frame at: 0x5ffe70
 Called by Frame at: 0x5ffeb0
@@ -143,7 +143,6 @@ No, becuase of how malloc reserves memory. It reseveres a user-defined chuick of
 <div style="page-break-after: always;"></div>
 
 ## Exercise 2
-
 ---
 
 ### The source code of the modified program
@@ -206,7 +205,7 @@ int main(int argc, char * * argv)
 
 ![Exercise2Output](Exercise2Photos\Output.png)
 
-Due to us using the realloc function for our array it tells our system to keep the same addresses when using the function to resurve memory space. So when we call realoc to add more elements onto our array it will find our array and build off of it. In our case and it being an integer array the memory pointer increments in 4.
+Due to us using the realloc function for our array it tells our system to keep the same addresses when using the function to resurve memory space. So when we call realoc to add more elements onto our array it will find our array and build off of it. In our case and it being an integer array the memory pointer increments in 4. Also it isnt always guaranteed that it will continue off the last memory pointer of the orginal array, if there is allocated memory near the array it will have to skip over it and continue at a later memory location, this is rare though.
 
 <div style="page-break-after: always;"></div>
 
@@ -217,8 +216,6 @@ Due to us using the realloc function for our array it tells our system to keep t
 ### Remove any calls to free() function (if you had any) form the program form Exercise 2 and then run it again under valgrind. to Show the complete output (program output, plus the valgrind messages).  For example:
 
 `valgrind ./a.out`
-
-### Modify the program from Exercise 3.1 to eliminate the memory leak. Run the program again under valgrind. Show the modified program source code and the complete output (program output, plus the valgrind messages, if any).  
 
 Source Code:
 
@@ -237,14 +234,17 @@ int main(int argc, char * * argv)
 
     int i;
     int size = 5;
-    int addedSize = 9;
+    int addedSize = 8;
     int *a;
-
+    
     //call malloc
-    a = (int *) malloc(size);
+    a = malloc(size * sizeof(int));
+
     printf("\nMalloc Values:\n\n");
+
+
     //fill array with 1 to 5
-    for(i = 0; i <= size; i++)
+    for(i = 0; i < size; i++)
     {
         a[i] = i + 1;
     }
@@ -255,124 +255,229 @@ int main(int argc, char * * argv)
         printf("a[%d] = %d at address: %p \n", i, a[i], &a[i]);
     }
 
+
     printf("\nRealloc Values:\n\n");
+
     //called realloc getting the orignal values + our new size
-    a = (int *) realloc(a, addedSize);
+    int *b =  realloc(a, addedSize * sizeof(int));
+    a = b;
 
     //add more values to the array
     for(i = size; i < addedSize; i++){
         a[i] = i + 1;
     }
-
+    
     //print all values
     for (i=0; i< addedSize; i++)
     {
         printf("a[%d] = %d at address: %p \n", i, a[i], &a[i]);
     }
-
+    free(a);
     return EXIT_SUCCESS;
 }
 ```
+The output from running ./ex3
+
+```txt
+
+[q3d5k@gc112m36 Lab4]$ cd "/home1/ugrads/q3d5k/github/Cs2263/Labs/Lab4/" && gcc ex3.c -o ex3 && "/home1/ugrads/q3d5k/github/Cs2263/Labs/Lab4/"ex3
+
+Malloc Values:
+
+a[0] = 1 at address: 0x7692a0 
+a[1] = 2 at address: 0x7692a4 
+a[2] = 3 at address: 0x7692a8 
+a[3] = 4 at address: 0x7692ac 
+a[4] = 5 at address: 0x7692b0 
+
+Realloc Values:
+
+a[0] = 1 at address: 0x7696d0 
+a[1] = 2 at address: 0x7696d4 
+a[2] = 3 at address: 0x7696d8 
+a[3] = 4 at address: 0x7696dc 
+a[4] = 5 at address: 0x7696e0 
+a[5] = 6 at address: 0x7696e4 
+a[6] = 7 at address: 0x7696e8 
+a[7] = 8 at address: 0x7696ec
+
+```
+
 
 The output from running valgrind ./ex3
 
 ```txt
-==6479== Memcheck, a memory error detector
-==6479== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
-==6479== Using Valgrind-3.21.0 and LibVEX; rerun with -h for copyright info
-==6479== Command: ./ex3
-==6479== 
+[q3d5k@gc112m36 Lab4]$ valgrind ./ex3                                       
+==555178== Memcheck, a memory error detector
+==555178== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==555178== Using Valgrind-3.19.0 and LibVEX; rerun with -h for copyright info
+==555178== Command: ./ex3
+==555178== 
 
 Malloc Values:
 
-==6479== Invalid write of size 4
-==6479==    at 0x109218: main (in /home/will/Git/Cs2263/Labs/Lab4/ex3)
-==6479==  Address 0x4a7c044 is 4 bytes inside a block of size 5 alloc'd
-==6479==    at 0x4845828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==6479==    by 0x1091E1: main (in /home/will/Git/Cs2263/Labs/Lab4/ex3)
-==6479== 
-a[0] = 1 at address: 0x4a7c040 
-==6479== Conditional jump or move depends on uninitialised value(s)
-==6479==    at 0x48D2B59: __printf_buffer (vfprintf-process-arg.c:58)
-==6479==    by 0x48D36E0: __vfprintf_internal (vfprintf-internal.c:1523)
-==6479==    by 0x48C886E: printf (printf.c:33)
-==6479==    by 0x109272: main (in /home/will/Git/Cs2263/Labs/Lab4/ex3)
-==6479== 
-==6479== Use of uninitialised value of size 8
-==6479==    at 0x48C777B: _itoa_word (_itoa.c:178)
-==6479==    by 0x48D19A3: __printf_buffer (vfprintf-process-arg.c:155)
-==6479==    by 0x48D36E0: __vfprintf_internal (vfprintf-internal.c:1523)
-==6479==    by 0x48C886E: printf (printf.c:33)
-==6479==    by 0x109272: main (in /home/will/Git/Cs2263/Labs/Lab4/ex3)
-==6479== 
-==6479== Conditional jump or move depends on uninitialised value(s)
-==6479==    at 0x48C778C: _itoa_word (_itoa.c:178)
-==6479==    by 0x48D19A3: __printf_buffer (vfprintf-process-arg.c:155)
-==6479==    by 0x48D36E0: __vfprintf_internal (vfprintf-internal.c:1523)
-==6479==    by 0x48C886E: printf (printf.c:33)
-==6479==    by 0x109272: main (in /home/will/Git/Cs2263/Labs/Lab4/ex3)
-==6479== 
-a[1] = 2 at address: 0x4a7c044 
-==6479== Invalid read of size 4
-==6479==    at 0x109258: main (in /home/will/Git/Cs2263/Labs/Lab4/ex3)
-==6479==  Address 0x4a7c048 is 3 bytes after a block of size 5 alloc'd
-==6479==    at 0x4845828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==6479==    by 0x1091E1: main (in /home/will/Git/Cs2263/Labs/Lab4/ex3)
-==6479== 
-a[2] = 3 at address: 0x4a7c048 
-a[3] = 4 at address: 0x4a7c04c 
-a[4] = 5 at address: 0x4a7c050 
+a[0] = 1 at address: 0x4a74040 
+a[1] = 2 at address: 0x4a74044 
+a[2] = 3 at address: 0x4a74048 
+a[3] = 4 at address: 0x4a7404c 
+a[4] = 5 at address: 0x4a74050 
 
 Realloc Values:
 
-==6479== Invalid write of size 4
-==6479==    at 0x1092C9: main (in /home/will/Git/Cs2263/Labs/Lab4/ex3)
-==6479==  Address 0x4a7c4e4 is 11 bytes after a block of size 9 alloc'd
-==6479==    at 0x484ABC0: realloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==6479==    by 0x1092A2: main (in /home/will/Git/Cs2263/Labs/Lab4/ex3)
-==6479== 
-a[0] = 1 at address: 0x4a7c4d0 
-==6479== Conditional jump or move depends on uninitialised value(s)
-==6479==    at 0x48D2B59: __printf_buffer (vfprintf-process-arg.c:58)
-==6479==    by 0x48D36E0: __vfprintf_internal (vfprintf-internal.c:1523)
-==6479==    by 0x48C886E: printf (printf.c:33)
-==6479==    by 0x109323: main (in /home/will/Git/Cs2263/Labs/Lab4/ex3)
-==6479== 
-a[1] = 2 at address: 0x4a7c4d4 
-==6479== Conditional jump or move depends on uninitialised value(s)
-==6479==    at 0x48D1A54: __printf_buffer (vfprintf-process-arg.c:186)
-==6479==    by 0x48D36E0: __vfprintf_internal (vfprintf-internal.c:1523)
-==6479==    by 0x48C886E: printf (printf.c:33)
-==6479==    by 0x109323: main (in /home/will/Git/Cs2263/Labs/Lab4/ex3)
-==6479== 
-a[2] = 0 at address: 0x4a7c4d8 
-==6479== Invalid read of size 4
-==6479==    at 0x109309: main (in /home/will/Git/Cs2263/Labs/Lab4/ex3)
-==6479==  Address 0x4a7c4dc is 3 bytes after a block of size 9 alloc'd
-==6479==    at 0x484ABC0: realloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==6479==    by 0x1092A2: main (in /home/will/Git/Cs2263/Labs/Lab4/ex3)
-==6479== 
-a[3] = 0 at address: 0x4a7c4dc 
-a[4] = 0 at address: 0x4a7c4e0 
-a[5] = 6 at address: 0x4a7c4e4 
-a[6] = 7 at address: 0x4a7c4e8 
-a[7] = 8 at address: 0x4a7c4ec 
-a[8] = 9 at address: 0x4a7c4f0 
-==6479== 
-==6479== HEAP SUMMARY:
-==6479==     in use at exit: 9 bytes in 1 blocks
-==6479==   total heap usage: 3 allocs, 2 frees, 1,038 bytes allocated
-==6479== 
-==6479== LEAK SUMMARY:
-==6479==    definitely lost: 9 bytes in 1 blocks
-==6479==    indirectly lost: 0 bytes in 0 blocks
-==6479==      possibly lost: 0 bytes in 0 blocks
-==6479==    still reachable: 0 bytes in 0 blocks
-==6479==         suppressed: 0 bytes in 0 blocks
-==6479== Rerun with --leak-check=full to see details of leaked memory
-==6479== 
-==6479== Use --track-origins=yes to see where uninitialised values come from
-==6479== For lists of detected and suppressed errors, rerun with: -s
-==6479== ERROR SUMMARY: 28 errors from 9 contexts (suppressed: 0 from 0)
-will@will-System-Product-Name:~/Git/Cs2263/Labs/Lab4$ 
+a[0] = 1 at address: 0x4a744e0 
+a[1] = 2 at address: 0x4a744e4 
+a[2] = 3 at address: 0x4a744e8 
+a[3] = 4 at address: 0x4a744ec 
+a[4] = 5 at address: 0x4a744f0 
+a[5] = 6 at address: 0x4a744f4 
+a[6] = 7 at address: 0x4a744f8 
+a[7] = 8 at address: 0x4a744fc 
+==555178== 
+==555178== HEAP SUMMARY:
+==555178==     in use at exit: 32 bytes in 1 blocks
+==555178==   total heap usage: 3 allocs, 2 frees, 1,076 bytes allocated
+==555178== 
+==555178== LEAK SUMMARY:
+==555178==    definitely lost: 32 bytes in 1 blocks
+==555178==    indirectly lost: 0 bytes in 0 blocks
+==555178==      possibly lost: 0 bytes in 0 blocks
+==555178==    still reachable: 0 bytes in 0 blocks
+==555178==         suppressed: 0 bytes in 0 blocks
+==555178== Rerun with --leak-check=full to see details of leaked memory
+==555178== 
+==555178== For lists of detected and suppressed errors, rerun with: -s
+==555178== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+[q3d5k@gc112m36 Lab4]$ 
+```
+
+### Modify the program from Exercise 3.1 to eliminate the memory leak. Run the program again under valgrind. Show the modified program source code and the complete output (program output, plus the valgrind messages, if any).  
+
+
+Source Code:
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+
+void dummy_frame()
+{
+    return;
+}
+
+int main(int argc, char * * argv)
+{
+
+    int i;
+    int size = 5;
+    int addedSize = 8;
+    int *a;
+    
+    //call malloc
+    a = malloc(size * sizeof(int));
+
+    printf("\nMalloc Values:\n\n");
+
+
+    //fill array with 1 to 5
+    for(i = 0; i < size; i++)
+    {
+        a[i] = i + 1;
+    }
+
+    //print the original array
+    for (i=0; i< size; i++)
+    {
+        printf("a[%d] = %d at address: %p \n", i, a[i], &a[i]);
+    }
+
+
+    printf("\nRealloc Values:\n\n");
+
+    //called realloc getting the orignal values + our new size
+    int *b =  realloc(a, 8 * sizeof(int));
+    a = b;
+
+    //add more values to the array
+    for(i = size; i < 8; i++){
+        a[i] = i + 1;
+    }
+    
+    //print all values
+    for (i=0; i< 8; i++)
+    {
+        printf("a[%d] = %d at address: %p \n", i, a[i], &a[i]);
+    }
+    free(a);
+    return EXIT_SUCCESS;
+}
+
+```
+
+The output from running ./ex3
+
+```txt
+
+[q3d5k@gc112m36 Lab4]$ cd "/home1/ugrads/q3d5k/github/Cs2263/Labs/Lab4/" && gcc ex3.c -o ex3 && "/home1/ugrads/q3d5k/github/Cs2263/Labs/Lab4/"ex3
+
+Malloc Values:
+
+a[0] = 1 at address: 0x1b2e2a0 
+a[1] = 2 at address: 0x1b2e2a4 
+a[2] = 3 at address: 0x1b2e2a8 
+a[3] = 4 at address: 0x1b2e2ac 
+a[4] = 5 at address: 0x1b2e2b0 
+
+Realloc Values:
+
+a[0] = 1 at address: 0x1b2e6d0 
+a[1] = 2 at address: 0x1b2e6d4 
+a[2] = 3 at address: 0x1b2e6d8 
+a[3] = 4 at address: 0x1b2e6dc 
+a[4] = 5 at address: 0x1b2e6e0 
+a[5] = 6 at address: 0x1b2e6e4 
+a[6] = 7 at address: 0x1b2e6e8 
+a[7] = 8 at address: 0x1b2e6ec 
+[q3d5k@gc112m36 Lab4]$ 
+
+```
+
+The fixed memory link output when running `valgrind ./ex3`
+
+```txt
+[q3d5k@gc112m36 Lab4]$ valgrind ./ex3                                       
+==556502== Memcheck, a memory error detector
+==556502== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==556502== Using Valgrind-3.19.0 and LibVEX; rerun with -h for copyright info
+==556502== Command: ./ex3
+==556502== 
+
+Malloc Values:
+
+a[0] = 1 at address: 0x4a74040 
+a[1] = 2 at address: 0x4a74044 
+a[2] = 3 at address: 0x4a74048 
+a[3] = 4 at address: 0x4a7404c 
+a[4] = 5 at address: 0x4a74050 
+
+Realloc Values:
+
+a[0] = 1 at address: 0x4a744e0 
+a[1] = 2 at address: 0x4a744e4 
+a[2] = 3 at address: 0x4a744e8 
+a[3] = 4 at address: 0x4a744ec 
+a[4] = 5 at address: 0x4a744f0 
+a[5] = 6 at address: 0x4a744f4 
+a[6] = 7 at address: 0x4a744f8 
+a[7] = 8 at address: 0x4a744fc 
+==556502== 
+==556502== HEAP SUMMARY:
+==556502==     in use at exit: 0 bytes in 0 blocks
+==556502==   total heap usage: 3 allocs, 3 frees, 1,076 bytes allocated
+==556502== 
+==556502== All heap blocks were freed -- no leaks are possible
+==556502== 
+==556502== For lists of detected and suppressed errors, rerun with: -s
+==556502== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+[q3d5k@gc112m36 Lab4]$ 
 ```
