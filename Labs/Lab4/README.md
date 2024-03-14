@@ -1,15 +1,16 @@
 
 # CS2263
 
-## Lab 3
-**Date:** February 8th, 2024  
+## Lab 4
+**Date:** March 14th, 2024  
 ---
 **Student:**  
 Name: Will Ross  
 Number: #3734692  
 Email: [will.ross@unb.ca](mailto:will.ross@unb.ca)
 
-**Due Date:** February 12th, 2024
+**Due Date:** March 18th, 2024
+
 ---
 ## Contents
 - [Lab 3](#lab-3)
@@ -46,7 +47,7 @@ Email: [will.ross@unb.ca](mailto:will.ross@unb.ca)
       - [TextBook Results](#textbook-results)
       - [My Results](#my-results)
 
-
+<div style="page-break-after: always;"></div>
 
 ## Lab 3
 
@@ -66,175 +67,157 @@ Email: [will.ross@unb.ca](mailto:will.ross@unb.ca)
 ```
 #### A. The screenshot showing the output form the backtrace bt. How many frames are there on the memory stack?
 
+![Backtrace](Exercise1Photos\ex1A2.png)
+
+From the photo we see that we have two frames frame 1 and frame o on the memory stack.
 
 #### B. The screenshot showing the output info frame 0. What are the frame boundaries of the main function? (Hint: compare the values under “Stack frame at” and “Called by frame at”).
+![InfoFrame0](Exercise1Photos\ex1B.png)
 
+Stack Frame at: 0x5ffe60
+Called by Frame at: 0x5ffeb0
+
+So the frame bountrys are 0x5ffeb0 -> 0x5ffe60
 
 #### C. Are the addresses of array elements falling within the range of the main function frame?
 
-The addresses 0x5ffe80 to 0x5ffe90 are within the main functions stack as we can see from the screenshot below
+![MainFrame](Exercise1Photos\mainframe.png)
 
+The addresses 0x5ffeb0 -> 0x5ffe60 are within the main functions stack as we can see from the screenshot above.
+
+<div style="page-break-after: always;"></div>
 
 ### 1.2  Modify the program ex1.c so that the array a[] is allocated on the heap (use malloc()). Set up the breakpoint at the function dummy_frame(). Run the program until the breakpoint.
 ---
 
 #### A. The source code of the modified program
 
+```c
+#include <stdio.h>
+#include <stdlib.h>
+ 
+void dummy_frame()
+{
+  return;
+}
 
+int main(int argc, char * * argv)
+{
+
+  int i;
+  int size = 5;
+
+  int *a = (int*)malloc(size);
+
+  //fill array with 1 to 5
+  for(i = 0; i <= size; i++)
+  {
+    a[i] = i + 1;
+  }
+
+  dummy_frame();
+
+  for (i=0; i< size; i++){
+    printf("a[%d] = %d at address: %p \n", i, a[i], &a[i]);
+  }
+  
+
+  free(a);
+  return EXIT_SUCCESS;
+}
+
+```
 #### B. The screenshot showing the output form the backtrace bt. How many frames are there on the memory stack?
 
+![Backtrace](Exercise1Photos\ex1.2A.png)
+
+From the photo we see that we have two frames frame 1 and frame 0 on the memory stack.
 
 #### C. The screenshot showing the output info frame 0. What are the frame boundaries of the main function? (Hint: compare the values under “Stack frame at” and “Called by frame at”).
 
+![InfoFrame](Exercise1Photos\ex1.2C.png)
+
+Stack Frame at: 0x5ffe70
+Called by Frame at: 0x5ffeb0
+
+So the frame bountrys are 0x5ffeb0 -> 0x5ffe70
 
 #### D. Are the addresses of array elements falling within the range of the main function frame? Explain why.
+![MainFrame](Exercise1Photos\ex1.2D2.png)
 
+No, becuase of how malloc reserves memory. It reseveres a user-defined chuick of memory and the address of the users defined memory is higher then the addresses of the stack frame.
+
+<div style="page-break-after: always;"></div>
 
 ## Exercise 2
-
+---
 ### The source code of the modified program
-
-
-### The screenshot showing the output. Are you getting the same addresses for the new extended array? Explain why.
-![Screenshot](Ex2Output.png)
-
-
-## Exercise 3
-
-### Source code 
-
 ```c
 #include <stdio.h>
 #include <stdlib.h>
 
 
-int arrindex(int a[], int * p){
-    return p - a;
-}
-
-
-int main (int argc ,char * * argv)
+void dummy_frame()
 {
-
-    //for exercise 3
-    int arr[] = {10, 11, 12, 13, 14, 15, 16};
-    for (int i = 0; i < sizeof(arr)/sizeof(arr[0]); i ++){
-        printf ("%d\t%d\n", i, arrindex( arr, & arr[i]));
-    }
-    return EXIT_SUCCESS;
+    return;
 }
-```
 
-### Output Screenshot
-![Screenshot](Ex3Output.png)
-
-## Exercise 4
-
-## Compiler command
-`[q3d5k@gc112m38 Lab3]$ cd "/home1/ugrads/q3d5k/Cs2263/Labs/Lab3/" && gcc wrongindex.c -o wrongindex && "/home1/ugrads/q3d5k/Cs2263/Labs/Lab3/"wrongindex`
-
-### Source code 
-
-```c
-
-/*
- * wrongindex.c
- */
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 int main(int argc, char * * argv)
 {
-    int x = -2;
-    int arr[] = {0, 1, 2, 3, 4};
-    int y = 15;
 
-    //memory address of x and y
-    //printf("& x = %p, & y = %p\n", (void*)& x, (void*)& y);
+    int i;
+    int size = 5;
+    int addedSize = 9;
+    int *a;
 
-    printf("& of x = %p,\n& of y = %p\n", & x, & y);
-
-
-    //one invaild
-    printf("& of arr[%d] %d\t%p\n", -1,arr[-1], &arr[-1]);
-
-    //all valid
-    for(int i = 0; i < sizeof(arr)/sizeof(arr[0]) + 1; i++){
-
-        printf("& of arr[%d]\t%d\t%p\n", i,arr[i], &arr[i]);
-
+    //call malloc
+    a = (int *) malloc(size);
+    printf("\nMalloc Values:\n\n");
+    //fill array with 1 to 5
+    for(i = 0; i <= size; i++)
+    {
+        a[i] = i + 1;
     }
 
-    printf("x = %d, y = %d\n", x, y);
+    //print the original array
+    for (i=0; i< size; i++)
+    {
+        printf("a[%d] = %d at address: %p \n", i, a[i], &a[i]);
+    }
 
-    arr[-1] = 7;
-    arr[5]  = -23;
+    printf("\nRealloc Values:\n\n");
+    //called realloc getting the orignal values + our new size
+    a = (int *) realloc(a, addedSize);
 
-    printf("x = %d, y = %d\n", x, y);
+    //add more values to the array
+    for(i = size; i < addedSize; i++){
+        a[i] = i + 1;
+    }
 
+    //print all values
+    for (i=0; i< addedSize; i++)
+    {
+        printf("a[%d] = %d at address: %p \n", i, a[i], &a[i]);
+    }
 
-    arr[6]  = 108;
-
-    printf("x = %d, y = %d\n", x, y);
-
-    arr[7]  = -353;
-
-    printf("x = %d, y = %d\n", x, y);
-
+    free(a);
     return EXIT_SUCCESS;
 }
 
 ```
 
-### Output Screenshot
-![Screenshot](Ex4Output.png)
+### The screenshot showing the output. Are you getting the same addresses for the new extended array? Explain why.
+![Exercise2Output](Exercise2Photos\Output.png)
 
-### Diagram of memory locations
-![Screenshot](Diagram.png)
-### Are the results (i.e. numerical values) printed from your program different from the results shown in the textbook? Explain why
+Due to us using the realloc function for our array it tells our system to keep the same addresses when using the function to resurve memory space. So when we call realoc to add more elements onto our array it will find our array and build off of it. In our case and it being an integer array the memory pointer increments in 4.
 
-#### Memory addresses
+<div style="page-break-after: always;"></div>
 
-My memory address will be completely diffrenet due to c being a hardware low level language so our memory addresses/pointers wil most likely always be different.
+## Exercise 3
+---
+### Remove any calls to free() function (if you had any) form the program form Exercise 2 and then run it again under valgrind. to Show the complete output (program output, plus the valgrind messages).  For example:
+`valgrind ./a.out`
 
-#### Numeric Changes
-In the text they do the out of bounds call `arr[-1]` there x changes to 108 while my y changes to 7 when I call `arr[-1]` this means that it does not overlap with y in my program due to my personal memory layout. 
 
-#### TextBook Results
+### Modify the program from Exercise 3.1 to eliminate the memory leak. Run the program again under valgrind. Show the modified program source code and the complete output (program output, plus the valgrind messages, if any).  
 
-```
-& x = 0x7fffcabf4e68, & y = 0x7fffcabf4e6c
-& arr[0] = 0x7fffcabf4e50, & arr[4] = 0x7fffcabf4e60
-x = -2, y = 15
-x = -2, y = 15
-x = 108, y = 15
-x = 108, y = -353
-
-As we can see, x has changed because of this assignment:
-    arr [6] = 108;
-Similarly, y is changed because of this assignment:
-    arr [7] = -353;
-
-```
-
-#### My Results
-
-```
-[q3d5k@gc112m38 ~]$ cd "/home1/ugrads/q3d5k/Cs2263/Labs/Lab3/" && gcc wrongindex.c -o wrongindex && "/home1/ugrads/q3d5k/Cs2263/Labs/Lab3/"wrongindex
-& of x = 0x7ffd46b75ae8,
-& of y = 0x7ffd46b75acc
-& of arr[-1] 15 0x7ffd46b75acc
-& of arr[0]     0       0x7ffd46b75ad0
-& of arr[1]     1       0x7ffd46b75ad4
-& of arr[2]     2       0x7ffd46b75ad8
-& of arr[3]     3       0x7ffd46b75adc
-& of arr[4]     4       0x7ffd46b75ae0
-& of arr[5]     0       0x7ffd46b75ae4
-& of arr[6]     -2      0x7ffd46b75ae8
-& of arr[7]     7       0x7ffd46b75aec
-x = -2, y = 15
-x = -2, y = 7
-x = 108, y = 7
-x = 108, y = 7
-[q3d5k@gc112m38 Lab3]$ 
-```
