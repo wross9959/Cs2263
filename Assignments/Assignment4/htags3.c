@@ -38,7 +38,7 @@ void readFile(char *filename)
     int uniqueCount = 0;
 
     //Array for all words stored
-    char * word;
+    char * word = NULL;
 
     //to add to the 2d array
     int newAllocat = 0;
@@ -55,6 +55,7 @@ void readFile(char *filename)
     //If we found duplicate
     bool found = false;
 
+    int allocatCount = 0;
     int open = '<';
     int close = '>';
 
@@ -85,7 +86,6 @@ void readFile(char *filename)
                 word = malloc(totalAllocat * sizeof(char));
 
                 //add the current word to be returned
-                word[index++] = open; 
                 word[index++] = currChar; 
                 continue;
             }
@@ -114,13 +114,10 @@ void readFile(char *filename)
                 // Set not in tag
                 inTag = false;
 
-                // Add the close tag
-                word[index++] = close;
 
                 // Set the end of the word array    
                 word[index] = '\0';
 
-                printf("Current Allocation of current tage %d\n", newAllocat);
 
                 // Check if the word is unique
                 found = false;
@@ -139,6 +136,9 @@ void readFile(char *filename)
                 // If the word is unique
                 if (!found)
                 {
+                    allocatCount += newAllocat;
+                    printf("Current Allocation of current tag: %d\n", newAllocat);
+
                     // Add the word to the unique array
                     unique = realloc(unique, (uniqueCount + 1) * sizeof(char *));
                     
@@ -157,7 +157,7 @@ void readFile(char *filename)
             }
         }
         // If we are in a tag and not in a comment        
-        if (inTag && !inComment && isalpha(currChar))
+        if (inTag && !inComment)
         {
             // Add a new heap memory allocation
             newAllocat++;
@@ -172,7 +172,7 @@ void readFile(char *filename)
     }
     printArr(unique, uniqueCount);
     fclose(file);
-
+    totalAllocat = allocatCount;
     printf("Total allocated memory: %d\n", totalAllocat);
     free(unique);
 }
