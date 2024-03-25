@@ -4,20 +4,27 @@
 #include <ctype.h>
 #include <string.h>
 
-//MAX Equals 150 for whole D2L site 
-#define MAX 100
 
-void printArr(char arr[][MAX], int size){
+void printArr(char **arr, int size){
 
     printf("Unique words between HTML tags:\n");
     for (int i = 0; i < size; i++)
     {
         printf("<%s>\n", arr[i]);
+        free(arr[i]);
     }
 }
 
 void readFile(char *filename)
 {
+    FILE *file = fopen(filename, "r");
+
+    if (file == NULL)
+    {
+        printf("ERROR: Could not open file\n");
+        return;
+    }
+
     //If we are in a tag
     bool inTag = false;
     
@@ -32,10 +39,12 @@ void readFile(char *filename)
 
     //Array for all words stored
     char * word;
-    int newAllocation = 0;
-    int totalAllocation = 0;
-    int open = '<';
-    int close = '>';
+
+    //to add to the 2d array
+    int newAllocat = 0;
+
+    //total allocation to the 2d array
+    int totalAllocat = 0;
 
     //Array for unique tags
     char ** unique = NULL;
@@ -44,21 +53,16 @@ void readFile(char *filename)
     int currChar;
 
     //If we found duplicate
-    bool found = 0;
+    bool found = false;
 
-    FILE *file = fopen(filename, "r");
-
-    if (file == NULL)
-    {
-        printf("ERROR: Could not open file\n");
-        return;
-    }
+    int open = '<';
+    int close = '>';
 
     while ((currChar = fgetc(file)) != EOF)
     {
 
         //check if we are at a tag start
-        if(currChar == '<'){
+        if(currChar == open){
 
             //get next char
             currChar = fgetc(file);
@@ -72,13 +76,13 @@ void readFile(char *filename)
             }
             else
             {
-                newAllocation = 0;
+                newAllocat = 2;
+                totalAllocat += 2;
 
-                newAllocation += 2;
-                totalAllocation += 2;
                 //in a tag and not a comment
+
                 inTag = true;
-                word = malloc(totalAllocation * sizeof(char));
+                word = malloc(totalAllocat * sizeof(char));
 
                 //add the current word to be returned
                 word[index++] = open; 
@@ -88,7 +92,7 @@ void readFile(char *filename)
         }
 
         //if the current is at the end of a tag
-        else if (currChar == '>')
+        else if (currChar == close)
         {
 
             //if was in a comment change to false
@@ -101,24 +105,30 @@ void readFile(char *filename)
             //if not in comment
             else{
 
-                newAllocation += 2;
-                totalAllocation += 2;
-                word = realloc(word, totalAllocation);
-                //set not in tag
+                //set the array to be 2 more for last char and close tag
+                newAllocat += 2;
+                totalAllocat += 2;
+                word = realloc(word, totalAllocat * sizeof(char));
+                
+
+                // Set not in tag
                 inTag = false;
 
+                // Add the close tag
                 word[index++] = close;
 
-                //set the end of the word array    
+                // Set the end of the word array    
                 word[index] = '\0';
 
-                printf("Current Allocation of tag %d\n", newAllocation);
-                found = 0;
+                printf("Current Allocation of current tage %d\n", newAllocat);
 
-                //loop through the word array to make sure all unique
+                // Check if the word is unique
+                found = false;
+
+                // Loop through the word array to make sure all unique
                 for (int i = 0; i < uniqueCount; i++)
                 {
-                    //check if they are the same
+                    // Check if they are the same
                     if (strcmp(word, unique[i]) == 0)
                     {
                         found = true;
@@ -126,41 +136,45 @@ void readFile(char *filename)
                     }
                 }
 
-                // If the word is unique add it to unique
+                // If the word is unique
                 if (!found)
                 {
+                    // Add the word to the unique array
                     unique = realloc(unique, (uniqueCount + 1) * sizeof(char *));
-                    unique[uniqueCount] = malloc(totalAllocation * sizeof(char));
+                    
+                    // Allocate memory for the word
+                    unique[uniqueCount] = malloc(totalAllocat * sizeof(char));
+
+                    // Copy the word to the unique array
                     strcpy(unique[uniqueCount++], word);
                 }
                 
-                //reset index
+                // Reset the index
                 index = 0;
+
+                // Free the word allocation
                 free(word);
             }
         }
-        //stores the strings of tags
+        // If we are in a tag and not in a comment        
         if (inTag && !inComment && isalpha(currChar))
         {
-            newAllocation += 1;
-            totalAllocation++;
+            // Add a new heap memory allocation
+            newAllocat++;
+            totalAllocat++;
 
-            word = realloc(word, totalAllocation);
+            // Reallocate the word array
+            word = realloc(word, totalAllocat * sizeof(char));
+
+            // Add the current char to the word array
             word[index++] = currChar;
         }
     }
-    //printArr(unique, uniqueCount);
-    // print unique words & free uniqueWords allocation
-    printf("\n");
-    printf("Unique words between HTML tags:\n");
-    for (int i = 0; i < uniqueCount; i++)
-    {
-        printf("%s\n", unique[i]);
-        free(unique[i]);
-    }
+    printArr(unique, uniqueCount);
+    fclose(file);
 
-    printf("Total allocated memory: %d\n", totalAllocation);
-    printf("\n");
+    printf("Total allocated memory: %d\n", totalAllocat);
+    free(unique);
 }
 
 int main(int argc, char **argv)
