@@ -159,6 +159,7 @@ void readFile(char *filename)
         // If we are in a tag and not in a comment        
         if (inTag && !inComment)
         {
+            
             // Add a new heap memory allocation
             newAllocat++;
             totalAllocat++;
