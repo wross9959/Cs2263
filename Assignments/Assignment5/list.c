@@ -5,30 +5,25 @@
 #include <ctype.h>
 #include <string.h>
 
-extern size_t totalAllocat;
+
 
 Node *Node_construct(char *tag)
 {
     Node *n = malloc(sizeof(Node));
     if(n == NULL)
     {
-        exit(1);
+        return EXIT_FAILURE;
     }
+    n -> tag = malloc(sizeof(char) * (strlen(tag) + 1));
 
-    totalAllocat += sizeof(Node);
-
-    n -> tag = strdup(tag);
-
-    if(n->tag == NULL)
+    if ((n -> tag) == NULL)
     {
-        free(n);
-        exit(1);
-
+        free (n);
+        return NULL;
     }
-
-    totalAllocat += strlen(tag) + 1;
 
     n -> next = NULL;
+    strcpy(n -> tag, tag);
     return n;
 }
 

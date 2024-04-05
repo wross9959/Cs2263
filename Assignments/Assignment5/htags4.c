@@ -5,7 +5,6 @@
 #include <string.h>
 #include "list.h"
 
-size_t totalAllocat = 0;
 
 
 void printArr(char **arr, int size){
