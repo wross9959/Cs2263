@@ -60,6 +60,7 @@
   "files.associations": {
     "*.embeddedhtml": "html",
     "stdbool.h": "c",
-    "stdio.h": "c"
+    "stdio.h": "c",
+    "string.h": "c"
   }
 }

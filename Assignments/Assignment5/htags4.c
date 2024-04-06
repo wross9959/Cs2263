@@ -4,22 +4,22 @@
 #include <ctype.h>
 #include <string.h>
 #include "list.h"
-#include "list.c"
 
-// Constructor
-Node *Node_construct(char *tag);
 
-// Add a new node on the linked list
-Node *List_add(Node *head, Node *n);
+// // Constructor
+// Node *Node_construct(char *tag);
 
-// search for a node in the linked list
-int List_search(Node *head, Node *n);
+// // Add a new node on the linked list
+// Node *List_add(Node *head, Node *n);
 
-// print the linked list
-void List_print(Node *head);
+// // search for a node in the linked list
+// int List_search(Node *head, Node *n);
 
-// free memory in the list
-void List_free(Node *head);
+// // print the linked list
+// void List_print(Node *head);
+
+// // free memory in the list
+// void List_free(Node *head);
 
 
 void printArr(char **arr, int size){
@@ -41,6 +41,7 @@ void readFile(char *filename, bool memory)
         printf("ERROR: Could not open file\n");
         return;
     }
+    
 
     //If we are in a tag
     bool inTag = false;
@@ -85,7 +86,7 @@ void readFile(char *filename, bool memory)
 
     while ((currChar = fgetc(file)) != EOF)
     {
-
+        
         //check if we are at a tag start
         if(currChar == open){
 
@@ -164,7 +165,7 @@ void readFile(char *filename, bool memory)
                     head = List_add(head, n);
                 }
 
-                else if(List_search(head, n))
+                else if(List_search(head, (n -> tag)))
                 {
                     currAllocat = newAllocat + (sizeof(n) + (sizeof(n -> tag)));
                     totalPrint += currAllocat;
@@ -203,6 +204,7 @@ void readFile(char *filename, bool memory)
         }
     }
     List_print(head);
+    
     fclose(file);
     List_free(head);
     if(memory)

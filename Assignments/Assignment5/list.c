@@ -47,7 +47,8 @@ Node *List_add(Node *head, Node *n)
 
 }
 
-int List_search(Node * head, Node *tag)
+// int List_search(Node * head, Node * n)
+int List_search(Node * head, char * tag)
 {
     Node *current = head;
     while(current != NULL)
@@ -68,6 +69,7 @@ void List_print(Node *head)
 
     while(current != NULL)
     {
+        
         printf("%S\n", current -> tag);
         current = current -> next;
     }
