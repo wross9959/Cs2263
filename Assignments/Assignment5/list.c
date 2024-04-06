@@ -12,7 +12,7 @@ Node *Node_construct(char *tag)
     Node *n = malloc(sizeof(Node));
     if(n == NULL)
     {
-        return EXIT_FAILURE;
+        return NULL;
     }
     n -> tag = malloc(sizeof(char) * (strlen(tag) + 1));
 
