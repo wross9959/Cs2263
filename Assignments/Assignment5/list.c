@@ -1,90 +1,92 @@
 #include "list.h"
+#include <ctype.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include <ctype.h>
 #include <string.h>
+int totalAllocat = 0;
 
-
-
-Node *Node_construct(char *tag)
+Node *Node_construct(char *tag) 
 {
+    size_t tagSize = sizeof(strlen(tag) + 1);
     Node *n = malloc(sizeof(Node));
-    if(n == NULL)
+
+    if (n == NULL) 
     {
         return NULL;
     }
-    n -> tag = malloc(sizeof(char) * (strlen(tag) + 1));
 
-    if ((n -> tag) == NULL)
+    totalAllocat += sizeof(n);
+    n->tag = malloc(sizeof(tagSize));
+
+    if ((n->tag) == NULL) 
     {
-        free (n);
+        free(n);
         return NULL;
     }
 
-    n -> next = NULL;
-    strcpy(n -> tag, tag);
+    totalAllocat += tagSize;
+
+    strcpy(n->tag, tag);
+    n->next = NULL;
     return n;
 }
 
-
 // this just adds at the end due adding tags at the end to be read later
-Node *List_add(Node *head, Node *n)
+Node *List_add(Node *head, Node *n) 
 {
-    if(head == NULL)
+    if (head == NULL) 
     {
         return n;
     }
     Node *current = head;
 
-    while(current -> next != NULL)
+    while (current->next != NULL) 
     {
-        current = current -> next;
+        current = current->next;
     }
-    current -> next = n;
+    current->next = n;
 
     return head;
-
 }
 
 // int List_search(Node * head, Node * n)
-int List_search(Node * head, char * tag)
+int List_search(Node *head, char *tag) 
 {
     Node *current = head;
-    while(current != NULL)
+    while (current != NULL) 
     {
-        if(strcmp(current -> tag, tag) == 0)
+        if (strcmp(current->tag, tag) == 0) 
         {
-            return true;
+            return false;
         }
-        current = current -> next;
+        current = current->next;
     }
 
-    return false;
+    return true;
 }
 
-void List_print(Node *head)
+void List_print(Node *head) 
 {
     Node *current = head;
 
-    while(current != NULL)
+    while (current != NULL) 
     {
-        
-        printf("%S\n", current -> tag);
-        current = current -> next;
-    }
 
+        printf("%s\n", (current->tag));
+        current = current->next;
+    }
 }
 
-void List_free(Node *head)
+void List_free(Node *head) 
 {
     Node *current = head;
 
-    while(current != NULL)
+    while (current != NULL) 
     {
         Node *temp = current;
-        current = current -> next;
-        free(temp -> tag);
+        current = current->next;
+        free(temp->tag);
         free(temp);
     }
 }
