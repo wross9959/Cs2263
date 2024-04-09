@@ -31,49 +31,53 @@ void readFile(char *filename, bool memory)
         {
             inTag = true;
             index = 0;
-            word[index++] = currChar;
+            
+            word[index++] = open;
             currentAllocat = 1;
             continue;
 
         } 
         else if (currChar == close && inTag) 
         {
-            word[index++] = currChar;
+            word[index++] = close;
             word[index] = '\0';
-            currentAllocat += 1;
+            currentAllocat += 2;
             inTag = false;
 
             if (!inComment && List_search(head, word)) 
             {
-
                 Node *n = Node_construct(word);
                 head = List_add(head, n);
-                currentAllocat += sizeof(n);
+                
+                
+                currentAllocat += sizeof(*n);
                 totalAllocat += currentAllocat;
+                
                 if (memory) 
                 {
                     printf("Current allocated memory: %d bytes\n", currentAllocat);
+                    
                 }
             }
             inComment = false;
         } 
-        else if (inTag) 
+        else if (inTag && index == 0 && currChar == '!') 
         {
-            if (index == 0 && currChar == '!') 
-            {
-                inComment = true;
-            } 
-            else if (!inComment) 
-            {
-                word[index++] = currChar;
-                currentAllocat += sizeof(currChar);
-            }
+            
+            inComment = true;
         }
+        else if (!inComment && inTag) 
+        {
+            word[index++] = currChar;
+            currentAllocat++;
+        }
+
     }
 
     fclose(file);
     List_print(head);
     List_free(head);
+    
     if (memory) 
     {
         printf("Total allocated memory: %d bytes\n", totalAllocat);

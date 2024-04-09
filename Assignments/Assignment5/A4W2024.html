@@ -1,0 +1,192 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+/* Font Definitions */
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Times;
+	panose-1:0 0 5 0 0 0 0 2 0 0;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0cm;
+	font-size:12.0pt;
+	font-family:Times;}
+p.MsoBodyTextIndent, li.MsoBodyTextIndent, div.MsoBodyTextIndent
+	{mso-style-link:"Body Text Indent Char";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:0cm;
+	margin-left:1.0cm;
+	text-indent:-1.0cm;
+	font-size:12.0pt;
+	font-family:Times;}
+a:link, span.MsoHyperlink
+	{color:blue;
+	text-decoration:underline;}
+span.BodyTextIndentChar
+	{mso-style-name:"Body Text Indent Char";
+	mso-style-link:"Body Text Indent";
+	font-family:Times;}
+.MsoChpDefault
+	{font-size:10.0pt;
+	font-family:"Calibri",sans-serif;}
+@page WordSection1
+	{size:612.0pt 792.0pt;
+	margin:72.0pt 90.0pt 72.0pt 90.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-CA link=blue vlink="#954F72" style='word-wrap:break-word'>
+
+<div class=WordSection1>
+
+<p class=MsoNormal><b><span lang=EN-US style='font-size:14.0pt;font-family:
+"Times New Roman",serif'>CS 2263</span></b></p>
+
+<p class=MsoNormal><b><span lang=EN-US style='font-size:14.0pt;font-family:
+"Times New Roman",serif'>Assignment 4</span></b></p>
+
+<p class=MsoNormal><b><span lang=EN-US style='font-size:14.0pt;font-family:
+"Times New Roman",serif'>Due: Wednesday March 27, 2024 (before midnight) </span></b></p>
+
+<p class=MsoNormal style='text-align:justify'><span lang=EN-US
+style='font-family:"Times New Roman",serif'>_______________________________________________________</span></p>
+
+<p class=MsoNormal><u><span lang=EN-US style='font-family:"Times New Roman",serif'>Assignments
+are to be completed individually (<b>not</b> as a group work).</span></u></p>
+
+<p class=MsoNormal><span lang=EN-US style='font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal><span lang=EN-US style='font-family:"Times New Roman",serif'>Reference:
+<a href="https://www.educba.com/types-of-tags-in-html/"><span style='text-decoration:
+none'>https://www.educba.com/types-of-tags-in-html/</span></a> </span></p>
+
+<p class=MsoNormal><span style='font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:0cm;margin-bottom:.0001pt;text-indent:0cm;line-height:12.0pt'><i><span
+style='font-family:"Times New Roman",serif'>Processing strings, arrays on the
+heap</span></i></p>
+
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:7.1pt;margin-bottom:.0001pt;text-indent:0cm;line-height:12.0pt'><span
+lang=EN-US style='font-family:"Times New Roman",serif'>Develop and test <b>a
+new version</b> of the </span><span lang=EN-US style='font-family:"Courier New"'>htags</span><span
+lang=EN-US style='font-family:"Times New Roman",serif'> program from
+Assignments 2 and 3 for examining the HTML tags in an HTML file, called �</span><span
+lang=EN-US style='font-family:"Courier New"'>htags3</span><span lang=EN-US
+style='font-family:"Times New Roman",serif'>�. The </span><span lang=EN-US
+style='font-family:"Courier New"'>htags3</span><span lang=EN-US
+style='font-family:"Times New Roman",serif'> program should work similarly to </span><span
+lang=EN-US style='font-family:"Courier New"'>htags2</span><span lang=EN-US
+style='font-family:"Times New Roman",serif'> program except it
+should&nbsp;allocate storage on the heap instead of declaring arrays with fixed
+size on the call stack. <u>The detected tags are to be stored in a 2D array
+allocated on the heap</u>, and the size of the array, at any given time, must
+be no greater than what is required for tags read so far. Every time new memory
+is allocated on the heap, the program <u>should print the amount of the new
+allocation</u> (in bytes) and the total memory allocated so far. Finally, before
+the program ends, you must deallocate (free()) all the storage used on the
+heap.</span></p>
+
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:7.1pt;margin-bottom:.0001pt;text-indent:0cm;line-height:12.0pt'><span
+lang=EN-US style='font-family:"Times New Roman",serif'>All other requirements
+stay the same: specify the name of the html file as a command line parameter,
+then process this file printing each tag only once. &nbsp;The printout should
+show both the tags and the memory allocation figures. </span></p>
+
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;line-height:12.0pt'><span
+lang=EN-US style='font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:7.1pt;margin-bottom:.0001pt;text-indent:0cm;line-height:12.0pt'><span
+lang=EN-US style='font-family:"Times New Roman",serif'>The Assignment Report
+should consist of the following parts/exercises:</span></p>
+
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:43.1pt;margin-bottom:.0001pt;text-indent:-18.0pt;line-height:
+12.0pt'><span lang=EN-US style='font-family:"Times New Roman",serif'>1.</span><span
+lang=EN-US style='font-size:7.0pt;font-family:"Times New Roman",serif'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span lang=EN-US style='font-family:"Times New Roman",serif'>In a few
+sentences describe the design of the </span><span lang=EN-US style='font-family:
+"Courier New"'>htags3</span><span lang=EN-US style='font-family:"Times New Roman",serif'>
+program. Focus on the description of the algorithm used and of any data
+structures needed to complete the task.</span></p>
+
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:43.1pt;margin-bottom:.0001pt;text-indent:-18.0pt;line-height:
+12.0pt'><span lang=EN-US style='font-family:"Times New Roman",serif'>2.</span><span
+lang=EN-US style='font-size:7.0pt;font-family:"Times New Roman",serif'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-family:"Times New Roman",serif'>Show the <u>complete</u>
+source code.</span></p>
+
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+12.0pt;margin-left:43.1pt;text-indent:-18.0pt;line-height:12.0pt'><span
+lang=EN-US style='font-family:"Times New Roman",serif'>3.</span><span
+lang=EN-US style='font-size:7.0pt;font-family:"Times New Roman",serif'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-family:"Times New Roman",serif'>Show the output from
+running </span><span lang=EN-US style='font-family:"Courier New"'>htags3</span><span
+lang=EN-US style='font-family:"Times New Roman",serif'> </span><span
+style='font-family:"Times New Roman",serif'>program on the following input HTML
+code (store it in a file): <br>
+<br>
+&lt;html&gt; &lt;b&gt; TEST1 &lt;/b&gt; &lt;b&gt; TEST2 &lt;/b&gt;
+&lt;/html&gt;</span></p>
+
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:43.1pt;margin-bottom:.0001pt;text-indent:-18.0pt;line-height:
+12.0pt'><span lang=EN-US style='font-family:"Times New Roman",serif'>4.</span><span
+lang=EN-US style='font-size:7.0pt;font-family:"Times New Roman",serif'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-family:"Times New Roman",serif'>Show the output from
+running </span><span lang=EN-US style='font-family:"Courier New"'>htags3</span><span
+lang=EN-US style='font-family:"Times New Roman",serif'> </span><span
+style='font-family:"Times New Roman",serif'>program on this HTML file, i.e. the
+very file describing this assignment: you need to download this file separately
+from D2L to your computer</span><span lang=EN-US style='font-family:"Times New Roman",serif'>
+(do not download the entire D2L web page!). The file name is
+A4W2024.html.&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;</span></p>
+
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:43.1pt;margin-bottom:.0001pt;text-indent:-18.0pt;line-height:
+12.0pt'><span lang=EN-US style='font-family:"Times New Roman",serif'>5.</span><span
+lang=EN-US style='font-size:7.0pt;font-family:"Times New Roman",serif'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-family:"Times New Roman",serif'>Show the output from
+running </span><span lang=EN-US style='font-family:"Courier New"'>htags3</span><span
+lang=EN-US style='font-family:"Times New Roman",serif'> </span><span
+style='font-family:"Times New Roman",serif'>program on another HTML file, of
+your choice.</span><span lang=EN-US style='font-family:"Times New Roman",serif'>&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;</span></p>
+
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;text-indent:0cm;line-height:
+12.0pt'><span lang=EN-US style='font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:7.1pt;margin-bottom:.0001pt;text-indent:0cm;line-height:12.0pt'><span
+lang=EN-US style='font-family:"Times New Roman",serif'>Submit a SINGLE PDF FILE
+with your Assignment Report and it should include: a heading for each exercise
+1 to 5, including the source code of each completed program and the screenshots
+showing the output (or the contents of the file with the redirected program
+output). In case of multiple submission the most recent item in your Dropbox
+will be graded.</span></p>
+
+<p class=MsoNormal><span lang=EN-US style='font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+</div>
+
+</body>
+
+</html>
