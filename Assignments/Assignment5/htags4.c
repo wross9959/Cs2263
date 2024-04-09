@@ -16,71 +16,83 @@ void readFile(char *filename, bool memory)
     }
 
     bool inTag = false, inComment = false;
-    int index = 0, currChar, open = '<', close = '>';
+    int index = 0, currChar, prevChar, open = '<', close = '>';
 
-    char word[256];
+    char *word = malloc(1);
     Node *head = NULL;
 
     int totalAllocat = 0;
-    int currentAllocat = 0;
+    int tagCount = 0;
 
-    while ((currChar = fgetc(file)) != EOF) 
-    {
+    while ((currChar = fgetc(file)) != EOF) {
 
-        if (currChar == open) 
+
+        if (currChar == '!' && prevChar == '<') 
         {
+            inComment = true;
+            inTag = false; 
+            index = 0; 
+            continue; 
+        }
+        if (inComment && prevChar == '-' && currChar == '>') 
+        {
+            inComment = false;
+            continue; 
+        }
+        if (inComment) 
+        {
+            prevChar = currChar; 
+            continue; 
+        }
+
+   
+        if (!inTag && currChar == '<') 
+        {
+
             inTag = true;
-            index = 0;
-            
-            word[index++] = open;
-            currentAllocat = 1;
-            continue;
+            word = realloc(word, index + 2);
+            word[index++] = currChar;
 
         } 
-        else if (currChar == close && inTag) 
+        else if (inTag && currChar == '>') 
         {
-            word[index++] = close;
-            word[index] = '\0';
-            currentAllocat += 2;
-            inTag = false;
 
-            if (!inComment && List_search(head, word)) 
+            word[index++] = currChar;
+            word[index] = '\0'; 
+            if (!List_search(head, word)) 
             {
                 Node *n = Node_construct(word);
                 head = List_add(head, n);
-                
-                
-                currentAllocat += sizeof(*n);
-                totalAllocat += currentAllocat;
-                
+                int currentTagMem = sizeof(Node) + strlen(n->tag) + 1;
+                totalAllocat += currentTagMem;
                 if (memory) 
                 {
-                    printf("Current allocated memory: %d bytes\n", currentAllocat);
-                    
+                    printf("Current allocated memory: %d bytes\n", currentTagMem);
+                    tagCount++;
                 }
             }
-            inComment = false;
+            word[0] = '\0'; 
+            index = 0; 
+            inTag = false;
         } 
-        else if (inTag && index == 1 && currChar == '!') 
+        else if (inTag) 
         {
-            
-            inComment = true;
-        }
-        else if (!inComment && inTag) 
-        {
+            word = realloc(word, index + 2); 
             word[index++] = currChar;
-            currentAllocat++;
         }
 
+        prevChar = currChar; 
     }
 
     fclose(file);
     List_print(head);
     List_free(head);
-    
+    free(word);
+
     if (memory) 
     {
         printf("Total allocated memory: %d bytes\n", totalAllocat);
+        printf("Number of tags found: %d\n", tagCount);
     }
 }
 
@@ -99,6 +111,5 @@ int main(int argc, char **argv)
     }
 
     readFile(argv[1], memory);
-
     return EXIT_SUCCESS;
 }

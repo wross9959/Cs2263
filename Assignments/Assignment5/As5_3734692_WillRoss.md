@@ -77,6 +77,7 @@ Node *List_add(Node *head, Node *n);
 
 // search for a node in the linked list
 int List_search(Node *head, char *tag);
+// int List_search(Node * head, Node * n);
 
 // print the linked list
 void List_print(Node *head);
@@ -98,37 +99,33 @@ void List_free(Node *head);
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-int totalAllocat = 0;
 
 Node *Node_construct(char *tag) 
 {
-    size_t tagSize = sizeof(strlen(tag) + 1);
     Node *n = malloc(sizeof(Node));
     
-
     if (n == NULL) 
     {
         return NULL;
     }
-
-    totalAllocat += sizeof(n);
-    n->tag = malloc(sizeof(tagSize));
+    size_t tagSize = sizeof(strlen(tag) + 1);
+    
+    n -> tag = strdup(tag);
 
     if ((n->tag) == NULL) 
     {
         free(n);
         return NULL;
     }
-
-    totalAllocat += tagSize;
-
-    strcpy(n->tag, tag);
     n->next = NULL;
+    
     return n;
 }
 
+// this just adds at the end due adding tags at the end to be read later
 Node *List_add(Node *head, Node *n) 
 {
+    
     if (head == NULL) 
     {
         return n;
@@ -138,25 +135,31 @@ Node *List_add(Node *head, Node *n)
     while (current->next != NULL) 
     {
         current = current->next;
+        
     }
+    
     current->next = n;
 
     return head;
 }
 
+// int List_search(Node * head, Node * n)
 int List_search(Node *head, char *tag) 
 {
     Node *current = head;
+
     while (current != NULL) 
     {
         if (strcmp(current->tag, tag) == 0) 
         {
-            return false;
+            return true;
         }
+        
         current = current->next;
+        
     }
 
-    return true;
+    return false;
 }
 
 void List_print(Node *head) 
@@ -189,6 +192,7 @@ void List_free(Node *head)
 ### Source code Htag4
 
 ```c
+
 #include "list.h"
 #include <ctype.h>
 #include <stdbool.h>
@@ -207,67 +211,83 @@ void readFile(char *filename, bool memory)
     }
 
     bool inTag = false, inComment = false;
-    int index = 0, currChar, open = '<', close = '>';
+    int index = 0, currChar, prevChar, open = '<', close = '>';
 
-    char word[256];
+    char *word = malloc(1);
     Node *head = NULL;
 
     int totalAllocat = 0;
-    int currentAllocat = 0;
+    int tagCount = 0;
 
-    while ((currChar = fgetc(file)) != EOF) 
-    {
+    while ((currChar = fgetc(file)) != EOF) {
 
-        if (currChar == open) 
+
+        if (currChar == '!' && prevChar == '<') 
         {
+            inComment = true;
+            inTag = false; 
+            index = 0; 
+            continue; 
+        }
+        if (inComment && prevChar == '-' && currChar == '>') 
+        {
+            inComment = false;
+            continue; 
+        }
+        if (inComment) 
+        {
+            prevChar = currChar; 
+            continue; 
+        }
+
+   
+        if (!inTag && currChar == '<') 
+        {
+
             inTag = true;
-            index = 0;
+            word = realloc(word, index + 2);
             word[index++] = currChar;
-            currentAllocat = 1;
-            continue;
 
         } 
-        else if (currChar == close && inTag) 
+        else if (inTag && currChar == '>') 
         {
-            word[index++] = currChar;
-            word[index] = '\0';
-            currentAllocat += 2;
-            inTag = false;
 
-            if (!inComment && List_search(head, word)) 
+            word[index++] = currChar;
+            word[index] = '\0'; 
+            if (!List_search(head, word)) 
             {
                 Node *n = Node_construct(word);
                 head = List_add(head, n);
-
-                currentAllocat += sizeof(Node);
-                totalAllocat += currentAllocat;
+                int currentTagMem = sizeof(Node) + strlen(n->tag) + 1;
+                totalAllocat += currentTagMem;
                 if (memory) 
                 {
-                    printf("Current allocated memory: %d bytes\n", currentAllocat);
+                    printf("Current allocated memory: %d bytes\n", currentTagMem);
+                    tagCount++;
                 }
             }
-            inComment = false;
+            word[0] = '\0'; 
+            index = 0; 
+            inTag = false;
         } 
         else if (inTag) 
         {
-            if (index == 0 && currChar == '!') 
-            {
-                inComment = true;
-            } 
-            else if (!inComment) 
-            {
-                word[index++] = currChar;
-                currentAllocat++;
-            }
+            word = realloc(word, index + 2); 
+            word[index++] = currChar;
         }
+
+        prevChar = currChar; 
     }
 
     fclose(file);
     List_print(head);
     List_free(head);
+    free(word);
+
     if (memory) 
     {
         printf("Total allocated memory: %d bytes\n", totalAllocat);
+        printf("Number of tags found: %d\n", tagCount);
     }
 }
 
@@ -286,7 +306,6 @@ int main(int argc, char **argv)
     }
 
     readFile(argv[1], memory);
-
     return EXIT_SUCCESS;
 }
 
@@ -304,13 +323,12 @@ Show the output from running htags4 program on the following input HTML code (st
 
 ```html
 
-~/htags$ gcc -o htags4 test.c list.c
-~/htags$ ./htags4 index.html
+PS C:\Users\willr\Documents\GitHub\Cs2263\Assignments\assignment5> ./htags4 index.html
 <html>
 <b>
 </b>
 </html>
-~/htags$ 
+PS C:\Users\willr\Documents\GitHub\Cs2263\Assignments\assignment5>
 
 ```
 
@@ -324,17 +342,18 @@ Show the output from running the htags4 program on the following input HTML code
 
 ```html
 
-~/htags$ ./htags4 index.html -m
-Current allocated memory: 26 bytes
-Current allocated memory: 14 bytes
-Current allocated memory: 18 bytes
-Current allocated memory: 30 bytes
+PS C:\Users\willr\Documents\GitHub\Cs2263\Assignments\assignment5> ./htags4 index.html -m
+Current allocated memory: 23 bytes
+Current allocated memory: 20 bytes
+Current allocated memory: 21 bytes
+Current allocated memory: 24 bytes
 <html>
 <b>
 </b>
 </html>
 Total allocated memory: 88 bytes
-~/htags$ 
+Number of tags found: 4
+PS C:\Users\willr\Documents\GitHub\Cs2263\Assignments\assignment5>
 
 ```
 
@@ -348,11 +367,178 @@ Show the output from running the htags4 program on this HTML file, i.e. the very
 
 ```html
 
+PS C:\Users\willr\Documents\GitHub\Cs2263\Assignments\assignment5> ./htags4 A4W2024.html        
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+</style>
+</head>
+<body lang=EN-CA link=blue vlink="#954F72" style='word-wrap:break-word'>
+<div class=WordSection1>
+<p class=MsoNormal>
+<b>
+<span lang=EN-US style='font-size:14.0pt;font-family:
+"Times New Roman",serif'>
+</span>
+</b>
+</p>
+<p class=MsoNormal style='text-align:justify'>
+<span lang=EN-US
+style='font-family:"Times New Roman",serif'>
+<u>
+<span lang=EN-US style='font-family:"Times New Roman",serif'>
+</u>
+<a href="https://www.educba.com/types-of-tags-in-html/">
+<span style='text-decoration:
+none'>
+</a>
+<span style='font-family:"Times New Roman",serif'>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:0cm;margin-bottom:.0001pt;text-indent:0cm;line-height:12.0pt'>
+<i>
+<span
+style='font-family:"Times New Roman",serif'>
+</i>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:7.1pt;margin-bottom:.0001pt;text-indent:0cm;line-height:12.0pt'>
+<span
+lang=EN-US style='font-family:"Times New Roman",serif'>
+<span lang=EN-US style='font-family:"Courier New"'>
+<span
+lang=EN-US style='font-family:"Courier New"'>
+<span lang=EN-US
+style='font-family:"Courier New"'>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;line-height:12.0pt'>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:43.1pt;margin-bottom:.0001pt;text-indent:-18.0pt;line-height:
+12.0pt'>
+<span
+lang=EN-US style='font-size:7.0pt;font-family:"Times New Roman",serif'>
+<span lang=EN-US style='font-family:
+"Courier New"'>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+12.0pt;margin-left:43.1pt;text-indent:-18.0pt;line-height:12.0pt'>
+<br>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;text-indent:0cm;line-height:
+12.0pt'>
+</div>
+</body>
+</html>
+PS C:\Users\willr\Documents\GitHub\Cs2263\Assignments\assignment5>
+
 ```
 
 ### Output with -m A4W2024
 
 ```html
+
+PS C:\Users\willr\Documents\GitHub\Cs2263\Assignments\assignment5> ./htags4 A4W2024.html -m
+Current allocated memory: 23 bytes
+Current allocated memory: 23 bytes
+Current allocated memory: 89 bytes
+Current allocated memory: 77 bytes
+Current allocated memory: 24 bytes
+Current allocated memory: 25 bytes
+Current allocated memory: 24 bytes
+Current allocated memory: 89 bytes
+Current allocated memory: 41 bytes
+Current allocated memory: 36 bytes
+Current allocated memory: 20 bytes
+Current allocated memory: 96 bytes
+Current allocated memory: 24 bytes
+Current allocated memory: 21 bytes
+Current allocated memory: 21 bytes
+Current allocated memory: 63 bytes
+Current allocated memory: 78 bytes
+Current allocated memory: 20 bytes
+Current allocated memory: 78 bytes
+Current allocated memory: 21 bytes
+Current allocated memory: 73 bytes
+Current allocated memory: 53 bytes
+Current allocated memory: 21 bytes
+Current allocated memory: 67 bytes
+Current allocated memory: 178 bytes
+Current allocated memory: 20 bytes
+Current allocated memory: 67 bytes
+Current allocated memory: 21 bytes
+Current allocated memory: 180 bytes
+Current allocated memory: 78 bytes
+Current allocated memory: 68 bytes
+Current allocated memory: 68 bytes
+Current allocated memory: 68 bytes
+Current allocated memory: 88 bytes
+Current allocated memory: 186 bytes
+Current allocated memory: 94 bytes
+Current allocated memory: 69 bytes
+Current allocated memory: 166 bytes
+Current allocated memory: 21 bytes
+Current allocated memory: 105 bytes
+Current allocated memory: 23 bytes
+Current allocated memory: 24 bytes
+Current allocated memory: 24 bytes
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+</style>
+</head>
+<body lang=EN-CA link=blue vlink="#954F72" style='word-wrap:break-word'>
+<div class=WordSection1>
+<p class=MsoNormal>
+<b>
+<span lang=EN-US style='font-size:14.0pt;font-family:
+"Times New Roman",serif'>
+</span>
+</b>
+</p>
+<p class=MsoNormal style='text-align:justify'>
+<span lang=EN-US
+style='font-family:"Times New Roman",serif'>
+<u>
+<span lang=EN-US style='font-family:"Times New Roman",serif'>
+</u>
+<a href="https://www.educba.com/types-of-tags-in-html/">
+<span style='text-decoration:
+none'>
+</a>
+<span style='font-family:"Times New Roman",serif'>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:0cm;margin-bottom:.0001pt;text-indent:0cm;line-height:12.0pt'>
+<i>
+<span
+style='font-family:"Times New Roman",serif'>
+</i>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:7.1pt;margin-bottom:.0001pt;text-indent:0cm;line-height:12.0pt'>
+<span
+lang=EN-US style='font-family:"Times New Roman",serif'>
+<span lang=EN-US style='font-family:"Courier New"'>
+<span
+lang=EN-US style='font-family:"Courier New"'>
+<span lang=EN-US
+style='font-family:"Courier New"'>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;line-height:12.0pt'>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:43.1pt;margin-bottom:.0001pt;text-indent:-18.0pt;line-height:
+12.0pt'>
+<span
+lang=EN-US style='font-size:7.0pt;font-family:"Times New Roman",serif'>
+<span lang=EN-US style='font-family:
+"Courier New"'>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+12.0pt;margin-left:43.1pt;text-indent:-18.0pt;line-height:12.0pt'>
+<br>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;text-indent:0cm;line-height:
+12.0pt'>
+</div>
+</body>
+</html>
+Total allocated memory: 2655 bytes
+Number of tags found: 43
+PS C:\Users\willr\Documents\GitHub\Cs2263\Assignments\assignment5>
 
 ```
 
@@ -365,13 +551,194 @@ I chose Assignment 5 as the test input as we were asked to test A4 not A5
 
 ```html
 
-
-
+PS C:\Users\willr\Documents\GitHub\Cs2263\Assignments\assignment5> ./htags4 A5W2024.html   
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+</style>
+</head>
+<body lang=EN-CA link=blue vlink="#954F72" style='word-wrap:break-word'>
+<div class=WordSection1>
+<p class=MsoNormal>
+<b>
+<span lang=EN-US style='font-size:14.0pt;font-family:
+"Times New Roman",serif'>
+</span>
+</b>
+</p>
+<p class=MsoNormal style='text-align:justify'>
+<span lang=EN-US
+style='font-family:"Times New Roman",serif'>
+<u>
+<span lang=EN-US style='font-family:"Times New Roman",serif'>
+</u>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:7.1pt;margin-bottom:.0001pt;text-indent:0cm;line-height:12.0pt'>
+<span
+lang=EN-US style='font-family:"Times New Roman",serif'>
+<br>
+<i>
+<span style='font-family:"Times New Roman",serif'>
+</i>
+<span lang=EN-US style='font-family:"Courier New"'>
+<span
+lang=EN-US style='font-family:"Courier New"'>
+<span lang=EN-US
+style='font-family:"Courier New"'>
+<span lang=EN-US style='font-family:
+"Courier New"'>
+<span lang=EN-US style='font-family:
+"Times New Roman",serif'>
+<span
+lang=EN-US style='font-family:Courier'>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:61.1pt;margin-bottom:.0001pt;text-indent:-18.0pt;line-height:
+12.0pt'>
+<p class=MsoNormal style='margin-left:61.1pt'>
+<span lang=EN-US
+style='font-size:8.0pt;font-family:"Courier New"'>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;line-height:12.0pt'>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:43.1pt;margin-bottom:.0001pt;text-indent:-18.0pt;line-height:
+12.0pt'>
+<span
+lang=EN-US style='font-size:7.0pt;font-family:"Times New Roman",serif'>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+12.0pt;margin-left:43.1pt;text-indent:-18.0pt;line-height:12.0pt'>
+<span
+style='font-family:"Times New Roman",serif'>
+<span style='font-family:
+"Courier New"'>
+<span style='font-family:"Courier New"'>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;text-indent:0cm;line-height:
+12.0pt'>
+</div>
+</body>
+</html>
+PS C:\Users\willr\Documents\GitHub\Cs2263\Assignments\assignment5>
 
 ```
 
 ### Output with -m A5W2024
 
 ```html
+
+PS C:\Users\willr\Documents\GitHub\Cs2263\Assignments\assignment5> ./htags4 A5W2024.html -m
+Current allocated memory: 23 bytes
+Current allocated memory: 23 bytes
+Current allocated memory: 89 bytes
+Current allocated memory: 77 bytes
+Current allocated memory: 24 bytes
+Current allocated memory: 25 bytes
+Current allocated memory: 24 bytes
+Current allocated memory: 89 bytes
+Current allocated memory: 41 bytes
+Current allocated memory: 36 bytes
+Current allocated memory: 20 bytes
+Current allocated memory: 96 bytes
+Current allocated memory: 24 bytes
+Current allocated memory: 21 bytes
+Current allocated memory: 21 bytes
+Current allocated memory: 63 bytes
+Current allocated memory: 78 bytes
+Current allocated memory: 20 bytes
+Current allocated memory: 78 bytes
+Current allocated memory: 21 bytes
+Current allocated memory: 180 bytes
+Current allocated memory: 78 bytes
+Current allocated memory: 21 bytes
+Current allocated memory: 20 bytes
+Current allocated memory: 67 bytes
+Current allocated memory: 21 bytes
+Current allocated memory: 68 bytes
+Current allocated memory: 68 bytes
+Current allocated memory: 68 bytes
+Current allocated memory: 69 bytes
+Current allocated memory: 79 bytes
+Current allocated memory: 62 bytes
+Current allocated memory: 186 bytes
+Current allocated memory: 63 bytes
+Current allocated memory: 84 bytes
+Current allocated memory: 88 bytes
+Current allocated memory: 186 bytes
+Current allocated memory: 94 bytes
+Current allocated memory: 166 bytes
+Current allocated memory: 67 bytes
+Current allocated memory: 58 bytes
+Current allocated memory: 57 bytes
+Current allocated memory: 105 bytes
+Current allocated memory: 23 bytes
+Current allocated memory: 24 bytes
+Current allocated memory: 24 bytes
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+</style>
+</head>
+<body lang=EN-CA link=blue vlink="#954F72" style='word-wrap:break-word'>
+<div class=WordSection1>
+<p class=MsoNormal>
+<b>
+<span lang=EN-US style='font-size:14.0pt;font-family:
+"Times New Roman",serif'>
+</span>
+</b>
+</p>
+<p class=MsoNormal style='text-align:justify'>
+<span lang=EN-US
+style='font-family:"Times New Roman",serif'>
+<u>
+<span lang=EN-US style='font-family:"Times New Roman",serif'>
+</u>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:7.1pt;margin-bottom:.0001pt;text-indent:0cm;line-height:12.0pt'>
+<span
+lang=EN-US style='font-family:"Times New Roman",serif'>
+<br>
+<i>
+<span style='font-family:"Times New Roman",serif'>
+</i>
+<span lang=EN-US style='font-family:"Courier New"'>
+<span
+lang=EN-US style='font-family:"Courier New"'>
+<span lang=EN-US
+style='font-family:"Courier New"'>
+<span lang=EN-US style='font-family:
+"Courier New"'>
+<span lang=EN-US style='font-family:
+"Times New Roman",serif'>
+<span
+lang=EN-US style='font-family:Courier'>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:61.1pt;margin-bottom:.0001pt;text-indent:-18.0pt;line-height:
+12.0pt'>
+<p class=MsoNormal style='margin-left:61.1pt'>
+<span lang=EN-US
+style='font-size:8.0pt;font-family:"Courier New"'>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;line-height:12.0pt'>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+0cm;margin-left:43.1pt;margin-bottom:.0001pt;text-indent:-18.0pt;line-height:
+12.0pt'>
+<span
+lang=EN-US style='font-size:7.0pt;font-family:"Times New Roman",serif'>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;margin-right:0cm;margin-bottom:
+12.0pt;margin-left:43.1pt;text-indent:-18.0pt;line-height:12.0pt'>
+<span
+style='font-family:"Times New Roman",serif'>
+<span style='font-family:
+"Courier New"'>
+<span style='font-family:"Courier New"'>
+<p class=MsoBodyTextIndent style='margin-top:6.0pt;text-indent:0cm;line-height:
+12.0pt'>
+</div>
+</body>
+</html>
+Total allocated memory: 2919 bytes
+Number of tags found: 46
+PS C:\Users\willr\Documents\GitHub\Cs2263\Assignments\assignment5>
 
 ```

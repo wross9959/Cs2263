@@ -15,17 +15,13 @@ Node *Node_construct(char *tag)
     }
     size_t tagSize = sizeof(strlen(tag) + 1);
     
-
-    n->tag = malloc(sizeof(tagSize));
+    n -> tag = strdup(tag);
 
     if ((n->tag) == NULL) 
     {
         free(n);
         return NULL;
     }
-
-
-    strcpy(n->tag, tag);
     n->next = NULL;
     
     return n;
@@ -56,22 +52,19 @@ Node *List_add(Node *head, Node *n)
 int List_search(Node *head, char *tag) 
 {
     Node *current = head;
-    
+
     while (current != NULL) 
     {
-        //printf("Breaks");
-        //printf("%s", current->tag);
         if (strcmp(current->tag, tag) == 0) 
         {
-            
-            return false;
+            return true;
         }
         
         current = current->next;
         
     }
 
-    return true;
+    return false;
 }
 
 void List_print(Node *head) 

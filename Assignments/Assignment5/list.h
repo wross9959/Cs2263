@@ -21,6 +21,7 @@ Node *List_add(Node *head, Node *n);
 
 // search for a node in the linked list
 int List_search(Node *head, char *tag);
+// int List_search(Node * head, Node * n);
 
 // print the linked list
 void List_print(Node *head);
