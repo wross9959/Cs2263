@@ -61,7 +61,7 @@ void readFile(char *filename, bool memory)
             }
             inComment = false;
         } 
-        else if (inTag && index == 0 && currChar == '!') 
+        else if (inTag && index == 1 && currChar == '!') 
         {
             
             inComment = true;
